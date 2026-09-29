@@ -16,6 +16,7 @@ struct CButton: View {
     let text: String
     let buttonType: CButtonType
     var leadingImage: Image? = nil
+    let action: () -> Void
     
     private var backgroundColor: Color {
         switch buttonType {
@@ -38,7 +39,7 @@ struct CButton: View {
     var body: some View {
         
         Button {
-            
+            action()
         } label: {
             Label {
                 Text(text)
@@ -66,8 +67,8 @@ struct CButton: View {
 }
 
 #Preview {
-    CButton(text: "Button", buttonType: .white)
-    CButton(text: "Button", buttonType: .black)
-    CButton(text: "Long Button text", buttonType: .white)
-    CButton(text: "Long Button text", buttonType: .black, leadingImage: Image(systemName: "plus"))
+    CButton(text: "Button", buttonType: .white){}
+    CButton(text: "Button", buttonType: .black){}
+    CButton(text: "Long Button text", buttonType: .white){}
+    CButton(text: "Long Button text", buttonType: .black, leadingImage: Image(systemName: "plus")){}
 }

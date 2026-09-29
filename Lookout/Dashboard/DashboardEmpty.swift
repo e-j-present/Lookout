@@ -34,7 +34,7 @@ struct DashboardEmpty: View {
             // add application section
             VStack(spacing: 24){
                 Circle()
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.quinary)
                     .frame(width: 75, height: 75)
                 
                 Text("No applications yet")
@@ -46,7 +46,9 @@ struct DashboardEmpty: View {
                     .foregroundStyle(.gray)
                     .fontWeight(.light)
                 
-                CButton(text: "Add application", buttonType: .black, leadingImage: Image(systemName: "plus"))
+                CButton(text: "Add application", buttonType: .black, leadingImage: Image(systemName: "plus")){
+                    
+                }
             }
             .frame(maxWidth: .infinity)
             .padding()
