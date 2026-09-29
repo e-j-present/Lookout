@@ -8,7 +8,7 @@ import SwiftUI
 
 // different types of Chips based on figma
 enum ChipType{
-    case black, white, bordered
+    case black, white, bordered, gray, gray_red
 }
 struct Chip: View {
     let text: String
@@ -33,6 +33,9 @@ struct Chip: View {
             Capsule()
                 .fill(.white)
                 .stroke(.gray, style: StrokeStyle(lineWidth: 1.5, dash: [10]))
+        case .gray, .gray_red:
+            Capsule()
+                .fill(.quinary)
         }
     }
    
@@ -40,6 +43,8 @@ struct Chip: View {
         switch (chipType){
         case .black:
             return .white
+        case .gray_red:
+            return .red
         default:
             return .black
         }
@@ -65,5 +70,7 @@ struct Chip: View {
         Chip(text: "Product Manager", chipType: .black)
         Chip(text: "Software Engineer", chipType: .white)
         Chip(text: "Other", chipType: .bordered, leadingImage: Image(systemName: "plus"))
+        Chip(text: "Software Engineer", chipType: .gray)
+        Chip(text: "Software Engineer", chipType: .gray_red)
     }
 }
