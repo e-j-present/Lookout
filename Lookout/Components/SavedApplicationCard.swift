@@ -43,73 +43,70 @@ struct SavedApplicationCard: View {
     
     
     var body: some View {
-        GeometryReader{ geometry in
-            HStack{
-                // MARK: Company Logo
-                Text(company.first!.uppercased())
-                    .padding()
-                    .frame(width: geometry.size.width * 0.15, height: geometry.size.width * 0.15)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(.black, lineWidth: 1)
-                            .fill(.black)
-                    )
-                    .foregroundStyle(.white)
-                    .font(.title2)
+        HStack(spacing: 12) {
+            // MARK: - Company Logo
+            Text(company.first?.uppercased() ?? "?")
+                .frame(width: 60, height: 60)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.black)
+                )
+                .foregroundStyle(.white)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .frame(maxHeight: .infinity, alignment: .top)
+
+            // MARK: - Main content
+            VStack(alignment: .leading) {
+                Text(role)
+                    .font(.title3)
                     .fontWeight(.semibold)
-                    .frame(maxHeight: .infinity, alignment: .top)
-                
-                // MARK: role, company, position, tags
-                VStack(){
-                    Text(role)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .minimumScaleFactor(0.65)
-                        .lineLimit(1)
-                    HStack{
-                        Text(company)
-                        Text("·")
-                        Text(source)
-                    }
+                    .minimumScaleFactor(0.65)
+                    .lineLimit(1)
+
+                HStack {
+                    Text(company)
+                    Text("·")
+                    Text(source)
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+                Spacer()
+
+                HStack {
+                    Chip(
+                        text: tagText,
+                        chipType: tagStyle,
+                        horizontalPadding: 8,
+                        verticalPadding: 5
+                    )
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    Spacer()
-                    HStack{
-                        Chip(text: tagText, chipType: tagStyle, horizontalPadding: 8, verticalPadding: 5)
-                            .font(.subheadline)
-                            .minimumScaleFactor(0.6)
-                            .lineLimit(1)
-                        Text(reminder)
-                            .font(.subheadline)
-                            .foregroundStyle(tagStyle == .gray_red ? .red : .secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    Spacer()
+                    .minimumScaleFactor(0.6)
+                    .lineLimit(1)
+
+                    Text(reminder)
+                        .font(.subheadline)
+                        .foregroundStyle(
+                            tagStyle == .gray_red ? .red : .secondary
+                        )
                 }
-                .frame(width: geometry.size.width * 0.70, alignment: .leading)
-                .frame(maxHeight: .infinity, alignment: .top)
-//                .border(.blue)
-                
-                // MARK: favorites
-                Button{
-                    isFavorite.toggle()
-                    if let getID = getID {
-                        getID(id, .favoriteToggled(isFavorite: isFavorite))
-                    }
-                } label: {
-                    Image(systemName: isFavorite ? "star.fill" : "star")
-                        .font(.title2)
-                }
-                .frame(maxHeight: .infinity, alignment: .top)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .tint(.black)
-                .buttonStyle(.borderless)
-//                .border(.green)
+
+                Spacer()
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            // MARK: - Favorite
+            Button {
+                isFavorite.toggle()
+                getID?(id, .favoriteToggled(isFavorite: isFavorite))
+            } label: {
+                Image(systemName: isFavorite ? "star.fill" : "star")
+                    .font(.title2)
+            }
+            .tint(.black)
+            .buttonStyle(.borderless)
             .frame(maxHeight: .infinity, alignment: .top)
-//            .border(.orange)
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 8)
@@ -117,7 +114,7 @@ struct SavedApplicationCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(.gray, lineWidth: 1)
         )
-        .padding(.horizontal)
+//        .padding(.horizontal)
         .frame(maxWidth: .infinity)
         .frame(height: 120)
         .contentShape(Rectangle())
