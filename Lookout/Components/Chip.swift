@@ -13,8 +13,8 @@ enum ChipType{
 struct Chip: View {
     let text: String
     let chipType: ChipType
-    let horizontalPadding: CGFloat = 16
-    let verticalPadding: CGFloat = 8
+    var horizontalPadding: CGFloat = 16
+    var verticalPadding: CGFloat = 8
     var leadingImage: Image? = nil
     
     // view builder lets you return multiple types of views
