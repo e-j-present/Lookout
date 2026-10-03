@@ -15,6 +15,8 @@ struct CButton: View {
     
     let text: String
     let buttonType: CButtonType
+    var fullWidth: Bool = false
+    var cornerRadius: CGFloat = 12
     var leadingImage: Image? = nil
     let action: () -> Void
     
@@ -49,12 +51,13 @@ struct CButton: View {
                 }
             }
             .fontWeight(buttonType == .black ? .semibold : .regular)
+            .frame(maxWidth: fullWidth ? .infinity: nil)
             .padding(16)
             .background(backgroundColor)
             .foregroundColor(foregroundColor)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(.black, lineWidth: buttonType == .white ? 1 : 0)
             )
         }
@@ -67,8 +70,16 @@ struct CButton: View {
 }
 
 #Preview {
-    CButton(text: "Button", buttonType: .white){}
-    CButton(text: "Button", buttonType: .black){}
-    CButton(text: "Long Button text", buttonType: .white){}
-    CButton(text: "Long Button text", buttonType: .black, leadingImage: Image(systemName: "plus")){}
+    VStack{
+        CButton(text: "Button", buttonType: .white){}
+        CButton(text: "Button", buttonType: .black){}
+        CButton(text: "Long Button text", buttonType: .white){}
+        CButton(text: "Long Button text", buttonType: .black, leadingImage: Image(systemName: "plus")){}
+        
+        CButton(text: "Long Button text", buttonType: .white, fullWidth: true, cornerRadius: 8){}
+    }
+    .padding(.horizontal)
+    .frame(maxWidth: .infinity)
+//    .border(.blue)
+    
 }
