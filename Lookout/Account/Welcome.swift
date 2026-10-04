@@ -40,7 +40,7 @@ struct Welcome: View {
                     getStartedClick.toggle()
                 }
                 .navigationDestination(isPresented: $getStartedClick) {
-                    DashboardEmpty()
+                    CreateAccount()
                 }
                 
                 HStack(spacing: 5){
