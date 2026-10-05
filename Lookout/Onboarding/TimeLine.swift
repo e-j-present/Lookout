@@ -8,8 +8,14 @@
 import SwiftUI
 
 struct TimeLine: View {
+    @State private var continueClick = false
+    
     @State private var graduationDate = Date()
     @State private var offerDate = Date()
+    
+    @State private var isStarting = false
+    @State private var isAlready = false
+    @State private var isInterviewing = false
     
     var body: some View {
         VStack {
@@ -30,23 +36,46 @@ struct TimeLine: View {
             VStack(spacing: 20) {
                 OptionSelect(
                     title: "Haven't applied anywhere yet",
-                    subTitle: "Just starting"
-                )
+                    subTitle: "Just starting",
+                    isSelected: $isStarting
+                ) { selected in
+                    if selected {
+                        isAlready = false
+                        isInterviewing = false
+                    }
+                }
                 
                 OptionSelect(
                     title: "Sent out a few applications",
-                    subTitle: "Already applying"
-                )
+                    subTitle: "Already applying",
+                    isSelected: $isAlready
+                ) { selected in
+                    if selected {
+                        isStarting = false
+                        isInterviewing = false
+                    }
+                }
                 
                 OptionSelect(
                     title: "In process with at least one company",
-                    subTitle: "Interviewing"
-                )
+                    subTitle: "Interviewing",
+                    isSelected: $isInterviewing
+                ) { selected in
+                    if selected {
+                        isStarting = false
+                        isAlready = false
+                    }
+                }
             }
             .padding()
             Spacer()
-            CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){}
+            CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){
+                continueClick.toggle()
+            }
                 .padding()
+                .navigationDestination(isPresented: $continueClick) {
+                    Notifications()
+                }
         }
     }
 }
