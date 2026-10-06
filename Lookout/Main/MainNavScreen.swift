@@ -62,7 +62,7 @@ struct MainNavScreen: View {
                 
                 // MARK: - Add screen
                 Button {
-                    showAddSheet = true
+                    
                     } label: {
                         Image(systemName: "plus")
                             .font(.title)
@@ -76,6 +76,19 @@ struct MainNavScreen: View {
                             }
                             .shadow(radius: 5)
                     }
+                    .simultaneousGesture(
+                        LongPressGesture(minimumDuration: 2)
+                            .onEnded{ _ in
+                                vm.clearJobList()
+                            }
+                    )
+                    // TODO: Remove tap gesture and add as regular button action. This is only here for the demo
+                    .simultaneousGesture(
+                        TapGesture()
+                            .onEnded{ _ in
+                                showAddSheet = true
+                            }
+                    )
                 
                 Spacer()
                 
@@ -139,6 +152,7 @@ struct SheetView: View{
             Spacer()
         }
         .padding()
+        
     }
 }
 

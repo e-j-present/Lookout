@@ -131,6 +131,10 @@ final class ViewModel {
         
         jobs = dummyJobs
     }
+    // dummy method used for demostration that removes all jobs from the list
+    func clearJobList(){
+        jobs = []
+    }
     
     // create an account, first checks user information (ie email not empty, password is good) and displays a UI element if there is an error
     func createAccount(firstName: String, email: String, password: String, passwordStrength: PasswordStrength, UIElement: (AccountErrors) -> Void){
