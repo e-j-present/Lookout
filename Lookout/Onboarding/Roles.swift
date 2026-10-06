@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct Roles: View {
-    @State var continueClick = false
-    
+
+    var vm = ViewModel.shared
+
     @State private var text: String = ""
     
     @State private var manager = false
@@ -23,7 +24,6 @@ struct Roles: View {
     @State private var finance = false
     
     var body: some View {
-        NavigationStack {
             VStack {
                 PageBar(currentPage: 1, totalPages: 4, showBack: false)
                     .padding()
@@ -89,14 +89,11 @@ struct Roles: View {
                 .padding(.horizontal)
                 Spacer()
                 CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){
-                    continueClick.toggle()
+                    vm.push(.timeline)
                 }
                 .padding()
-                .navigationDestination(isPresented: $continueClick) {
-                    TimeLine()
-                }
             }
-        }
+            .navigationBarBackButtonHidden(true)
     }
 }
 

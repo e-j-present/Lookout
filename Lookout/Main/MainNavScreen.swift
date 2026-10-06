@@ -117,6 +117,7 @@ struct MainNavScreen: View {
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showAddSheet) {
             SheetView()
         }
@@ -145,8 +146,8 @@ struct SheetView: View{
             Text("In the future, you will be able to paste a link here to quickly add a job posting in addition to manually adding them. Right now the only feature is to manually add them.")
             
             CButton(text: "Enter details by hand", buttonType: .white, fullWidth: true) {
-                // TODO: Navigate to add screen
-                vm.go(to: .addScreen)
+                dismiss()
+                vm.push(.addScreen)
             }
             
             Spacer()

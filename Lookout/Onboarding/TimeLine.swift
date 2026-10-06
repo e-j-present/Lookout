@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct TimeLine: View {
-    @State private var continueClick = false
-    
+
+    var vm = ViewModel.shared
+
     @State private var graduationDate = Date()
     @State private var offerDate = Date()
     
@@ -19,7 +20,9 @@ struct TimeLine: View {
     
     var body: some View {
         VStack {
-            PageBar(currentPage: 2, totalPages: 4, showBack: true)
+            PageBar(currentPage: 2, totalPages: 4, showBack: true) {
+                vm.pop()
+            }
                 .padding()
             Text("Set your timeline")
                 .font(.system(size: 40))
@@ -72,13 +75,11 @@ struct TimeLine: View {
             .padding()
             Spacer()
             CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){
-                continueClick.toggle()
+                vm.push(.notifications)
             }
                 .padding()
-                .navigationDestination(isPresented: $continueClick) {
-                    Notifications()
-                }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

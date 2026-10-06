@@ -11,7 +11,7 @@ import SwiftUI
 struct LookoutApp: App {
     var body: some Scene {
         WindowGroup {
-            Welcome()
+            RootView()
         }
     }
 }

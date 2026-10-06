@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct SubmitFirst: View {
+
+    var vm = ViewModel.shared
+
     @State private var company: String = "Google"
     @State private var role: String = "Associate Product Manager"
     @State private var source: String = "LinkedIn"
@@ -17,7 +20,9 @@ struct SubmitFirst: View {
     
     var body: some View {
         VStack(spacing: 1) {
-            PageBar(currentPage: 4, totalPages: 4, showBack: true)
+            PageBar(currentPage: 4, totalPages: 4, showBack: true) {
+                vm.pop()
+            }
                 .padding()
             Text("Look right?")
                 .font(.system(size: 40))
@@ -71,9 +76,13 @@ struct SubmitFirst: View {
             .frame(maxWidth: .infinity ,alignment: .leading)
             .padding(.horizontal)
             Spacer()
-            CButton(text: "Save application", buttonType: .black, fullWidth: true, cornerRadius: 8){}
+            CButton(text: "Save application", buttonType: .black, fullWidth: true, cornerRadius: 8){
+                // TODO: persist (company, role, source, stage) as a Job before navigating
+                vm.setRoot(.mainNavScreen)
+            }
                 .padding()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

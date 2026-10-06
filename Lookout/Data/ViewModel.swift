@@ -48,15 +48,6 @@ struct Job: Hashable{
     var status: JobStatus
 }
 
-// Navigation screens
-enum Screen: Hashable{
-    case createAccount
-    case logIn
-    case welcome
-    case mainNavScreen
-    case addScreen
-}
-
 // MARK: - Create Account Enum Errors
 enum EmptyAccountInfo{
     case name
@@ -91,20 +82,9 @@ final class ViewModel {
     // list of jobs
     var jobs: [Job] = []
 
-    // list of navigations
-    var navigationPath: [Screen] = []
+    // stack of pushed screens, on top of the root view in RootView. See ViewModel+Navigation.swift
+    var path: [Screen] = []
 
-    // Navigates to the given account screen. Swapping between login and
-    // create account replaces the top of the stack instead of pushing, so
-    // the back button always lands back on Welcome.
-    func go(to screen: Screen) {
-        if navigationPath.isEmpty {
-            navigationPath.append(screen)
-        } else {
-            navigationPath[navigationPath.count - 1] = screen
-        }
-    }
-    
     // method to create a job
     func createJob(job: Job){
         jobs.append(job)

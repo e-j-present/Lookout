@@ -114,7 +114,7 @@ struct CreateAccount: View {
             }
             
             CButton(text: "Create account", buttonType: .black, fullWidth: true) {
-                
+
                 vm.createAccount(firstName: firstName, email: email, password: password, passwordStrength: passwordStrength) { code in
                     if case .emptyAccountInfo(let emptyAccountInfo) = code {
                         print(emptyAccountInfo)
@@ -135,10 +135,10 @@ struct CreateAccount: View {
                             default:
                                 showErrorMessage = false
                             }
-                            
+
                         }
                     }
-                    
+
                     if case .passwordInfo(let passwordInfo) = code {
                         switch passwordInfo{
                         case .weak:
@@ -153,9 +153,14 @@ struct CreateAccount: View {
                             }
                         }
                     }
-                
+
                 }
-                
+
+                // account created with no validation errors: start onboarding fresh, with no way back to account creation
+                if !showErrorMessage && !passwordShowErrorMessage {
+                    vm.setRoot(.roles)
+                }
+
             }
             
             HStack {
@@ -175,7 +180,7 @@ struct CreateAccount: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Button("Log in"){
-                    vm.go(to: .logIn)
+                    vm.replaceTop(with: .logIn)
                 }
                 .foregroundStyle(.black)
                 .font(.subheadline)

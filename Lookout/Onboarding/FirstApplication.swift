@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct FirstApplication: View {
-    
-    @State private var goNext = false
+
+    var vm = ViewModel.shared
+
     @State private var text = ""
-    
+
     var body: some View {
         VStack {
-            PageBar(currentPage: 4, totalPages: 4, showBack: true)
+            PageBar(currentPage: 4, totalPages: 4, showBack: true) {
+                vm.pop()
+            }
                 .padding()
             Text("Add your first application")
                 .font(.system(size: 32))
@@ -33,13 +36,11 @@ struct FirstApplication: View {
                 .padding(.horizontal)
             Spacer()
             CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){
-                goNext.toggle()
+                vm.push(.submitFirst)
             }
                 .padding()
         }
-        .navigationDestination(isPresented: $goNext) {
-            SubmitFirst()
-        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

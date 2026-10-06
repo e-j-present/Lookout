@@ -48,28 +48,25 @@ struct AddScreen: View {
                 Spacer()
                 
                 CButton(text: "Cancel", buttonType: .white, fullWidth: true) {
-                    withAnimation {
-                        roleText = ""
-                        companyText = ""
-                        sourceText = ""
-                        selectedStage = .saved
-                    }
+                    vm.pop()
                 }
-                
+
                 Spacer()
-                
+
                 CButton(text: "Save", buttonType: .black, fullWidth: true) {
                     vm.createJob(job: Job(
                         role: roleText,
                         company: companyText,
                         source: sourceText,
                         status: selectedStage))
+                    vm.pop()
                 }
-                
+
                 Spacer()
             }
         }
         .padding()
+        .navigationBarBackButtonHidden(true)
     }
 }
 

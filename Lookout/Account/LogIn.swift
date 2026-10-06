@@ -69,7 +69,7 @@ struct LogIn: View {
                     withAnimation {
                         showErrorMessage = false
                     }
-                    vm.go(to: .mainNavScreen)
+                    vm.setRoot(.mainNavScreen)
                 } else{
                     print("Error")
                     
@@ -91,7 +91,7 @@ struct LogIn: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Button("Create an Account"){
-                    vm.go(to: .createAccount)
+                    vm.replaceTop(with: .createAccount)
                 }
                 .foregroundStyle(.black)
                 .font(.subheadline)

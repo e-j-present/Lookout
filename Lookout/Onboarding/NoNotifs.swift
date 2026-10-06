@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct NoNotifs: View {
-    @State private var goNext = false
-    
+
+    var vm = ViewModel.shared
+
     var body: some View {
         VStack {
-            PageBar(currentPage: 3, totalPages: 4, showBack: true)
+            PageBar(currentPage: 3, totalPages: 4, showBack: true) {
+                vm.pop()
+            }
                 .padding()
             HStack {
                 RoundedRectangle(cornerRadius: 50, style: .circular)
@@ -44,17 +47,15 @@ struct NoNotifs: View {
             .padding(.leading, 50)
             Spacer()
             CButton(text: "Open Settings", buttonType: .black, fullWidth: true, cornerRadius: 8){
-                goNext.toggle()
+                vm.push(.firstApplication)
             }
                 .padding()
             Button("Continue without") {
-                goNext.toggle()
+                vm.push(.firstApplication)
             }
             .foregroundStyle(.black)
         }
-        .navigationDestination(isPresented: $goNext) {
-            FirstApplication()
-        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

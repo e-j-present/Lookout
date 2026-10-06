@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct Notifications: View {
-    @State private var goNoNotifs = false
-    @State private var goFirst = false
-    
+
+    var vm = ViewModel.shared
+
     var body: some View {
         VStack {
-            PageBar(currentPage: 3, totalPages: 4, showBack: false)
+            PageBar(currentPage: 3, totalPages: 4, showBack: true) {
+                vm.pop()
+            }
                 .padding()
             Image(.turnOnNotifications)
                 .resizable()
@@ -30,21 +32,16 @@ struct Notifications: View {
                 .padding(.horizontal)
             Spacer()
             CButton(text: "Turn on notifications", buttonType: .black, fullWidth: true, cornerRadius: 8){
-                goFirst.toggle()
+                vm.push(.firstApplication)
             }
                 .padding()
             Button("Not now") {
-                goNoNotifs.toggle()
+                vm.push(.noNotifs)
             }
             .foregroundStyle(.black)
-                
+
         }
-        .navigationDestination(isPresented: $goFirst) {
-            FirstApplication()
-        }
-        .navigationDestination(isPresented: $goNoNotifs) {
-            NoNotifs()
-        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

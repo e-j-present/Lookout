@@ -1,0 +1,59 @@
+//
+//  RootView.swift
+//  Lookout
+//
+//  Created by Ethan Present on 10/6/26.
+//
+//  The app's single NavigationStack. Every screen is reachable by adding
+//  a case to Screen and a branch below - no other view should declare its
+//  own NavigationStack or navigationDestination.
+
+import SwiftUI
+
+struct RootView: View {
+
+    @Bindable var vm = ViewModel.shared
+
+    var body: some View {
+        NavigationStack(path: $vm.path) {
+            Welcome()
+                .navigationDestination(for: Screen.self) { screen in
+                    destination(for: screen)
+                }
+        }
+    }
+
+    @ViewBuilder
+    private func destination(for screen: Screen) -> some View {
+        switch screen {
+        case .welcome:
+            Welcome()
+        case .logIn:
+            LogIn()
+        case .createAccount:
+            CreateAccount()
+
+        case .roles:
+            Roles()
+        case .timeline:
+            TimeLine()
+        case .notifications:
+            Notifications()
+        case .noNotifs:
+            NoNotifs()
+        case .firstApplication:
+            FirstApplication()
+        case .submitFirst:
+            SubmitFirst()
+
+        case .mainNavScreen:
+            MainNavScreen()
+        case .addScreen:
+            AddScreen()
+        }
+    }
+}
+
+#Preview {
+    RootView()
+}
