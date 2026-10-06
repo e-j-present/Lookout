@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct Welcome: View {
-    
-    @State var getStartedClick = false
-    
+
+    @Bindable var vm = ViewModel.shared
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $vm.navigationPath) {
             VStack(spacing: 8){
                 Spacer()
                 
@@ -37,28 +37,35 @@ struct Welcome: View {
                 
                 
                 CButton(text: "Get started", buttonType: .black, fullWidth: true, cornerRadius: 8) {
-                    getStartedClick.toggle()
+                    vm.go(to: .createAccount)
                 }
-                .navigationDestination(isPresented: $getStartedClick) {
-                    CreateAccount()
-                }
-                
+
                 HStack(spacing: 5){
                     Text("Already have an account?")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     Button("Log in"){
-                        
+                        vm.go(to: .logIn)
                     }
                     .foregroundStyle(.black)
                     .font(.subheadline)
                     .fontWeight(.semibold)
                 }
-                
-                
+
+
             }
             .padding(.horizontal)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .navigationDestination(for: Screen.self) { screen in
+                switch screen {
+                case .createAccount:
+                    CreateAccount()
+                case .logIn:
+                    LogIn()
+                case .welcome:
+                    Welcome()
+                }
+            }
         }
     }
 }

@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct LogIn: View {
-    
+
+    var vm = ViewModel.shared
+
     @State var firstName: String = ""
     @State var email: String = ""
     @State var password: String = ""
@@ -60,6 +62,23 @@ struct LogIn: View {
             }
             
             CButton(text: "Log in", buttonType: .black, fullWidth: true) {
+                let LoginResults = vm.login(email: email, password: password)
+                
+                if LoginResults{
+                    print("Succesfully Singed in")
+                    withAnimation {
+                        showErrorMessage = false
+                    }
+                } else{
+                    print("Error")
+                    
+                    withAnimation {
+                        errorTitle = "Incorrect email or password"
+                        errorMessage = "The email or password your provided was incorrect. Try again"
+                        showErrorMessage = true
+                    }
+                }
+                
             }
             
             Spacer()
@@ -71,7 +90,7 @@ struct LogIn: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Button("Create an Account"){
-                    
+                    vm.go(to: .createAccount)
                 }
                 .foregroundStyle(.black)
                 .font(.subheadline)

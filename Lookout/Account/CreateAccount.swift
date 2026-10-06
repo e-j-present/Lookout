@@ -38,12 +38,19 @@ enum PasswordStrength: Int {
 
 struct CreateAccount: View {
 
+    var vm = ViewModel.shared
+
     @State var firstName: String = ""
     @State var email: String = ""
     @State var password: String = ""
-    @State var showErrorMessage: Bool = true
+    @State var showErrorMessage: Bool = false
     @State var errorTitle: String = "Couldn't Connect"
     @State var errorMessage: String = "Check your connection and try again. Your info is still here."
+
+    
+    let passwordOriginalHintMessage: String = "Use 8+ characters with a number or symbol"
+    @State var passwordHintMessage: String = "Use 8+ characters with a number or symbol"
+    @State var passwordShowErrorMessage: Bool = false
 
     var passwordStrength: PasswordStrength {
         switch password.count {
@@ -79,6 +86,7 @@ struct CreateAccount: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(.quinary)
@@ -87,7 +95,7 @@ struct CreateAccount: View {
             
             CTextField(label: "First Name", placeholder: "First name", text: $firstName, inputType: .firstName)
             CTextField(label: "Email", placeholder: "you@school.edu", text: $email, inputType: .email)
-            CTextField(label: "Password", placeholder: "Create a password", text: $password, inputType: .password, hint: "use 8+ characters with a numer or symbol")
+            CTextField(label: "Password", placeholder: "Create a password", text: $password, inputType: .password, hint: passwordHintMessage, showErrorMessage: passwordShowErrorMessage)
 
             if !password.isEmpty{
                 HStack{
@@ -106,6 +114,48 @@ struct CreateAccount: View {
             }
             
             CButton(text: "Create account", buttonType: .black, fullWidth: true) {
+                
+                vm.createAccount(firstName: firstName, email: email, password: password, passwordStrength: passwordStrength) { code in
+                    if case .emptyAccountInfo(let emptyAccountInfo) = code {
+                        print(emptyAccountInfo)
+                        withAnimation {
+                            switch emptyAccountInfo{
+                            case .name:
+                                errorTitle = "Empy name"
+                                errorMessage = "You must provide a name"
+                                showErrorMessage = true
+                            case .email:
+                                errorTitle = "Empy email"
+                                errorMessage = "You must provide an email address"
+                                showErrorMessage = true
+                            case .password:
+                                errorTitle = "Empy password"
+                                errorMessage = "You must provide a password"
+                                showErrorMessage = true
+                            default:
+                                showErrorMessage = false
+                            }
+                            
+                        }
+                    }
+                    
+                    if case .passwordInfo(let passwordInfo) = code {
+                        switch passwordInfo{
+                        case .weak:
+                            withAnimation {
+                                passwordHintMessage = "Too Weak"
+                                passwordShowErrorMessage = true
+                            }
+                        default:
+                            withAnimation {
+                                passwordHintMessage = passwordOriginalHintMessage
+                                passwordShowErrorMessage = false
+                            }
+                        }
+                    }
+                
+                }
+                
             }
             
             HStack {
@@ -125,7 +175,7 @@ struct CreateAccount: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Button("Log in"){
-                    
+                    vm.go(to: .logIn)
                 }
                 .foregroundStyle(.black)
                 .font(.subheadline)
