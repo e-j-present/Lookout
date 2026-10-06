@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct FirstApplication: View {
+    
+    @State private var goNext = false
     @State private var text = ""
     
     var body: some View {
@@ -30,8 +32,13 @@ struct FirstApplication: View {
             CButton(text: "Enter details by hand", buttonType: .white, fullWidth: true, cornerRadius: 8){}
                 .padding(.horizontal)
             Spacer()
-            CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){}
+            CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){
+                goNext.toggle()
+            }
                 .padding()
+        }
+        .navigationDestination(isPresented: $goNext) {
+            SubmitFirst()
         }
     }
 }

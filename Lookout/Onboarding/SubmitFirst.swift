@@ -71,7 +71,7 @@ struct SubmitFirst: View {
             .frame(maxWidth: .infinity ,alignment: .leading)
             .padding(.horizontal)
             Spacer()
-            CButton(text: "Continue", buttonType: .black, fullWidth: true, cornerRadius: 8){}
+            CButton(text: "Save application", buttonType: .black, fullWidth: true, cornerRadius: 8){}
                 .padding()
         }
     }

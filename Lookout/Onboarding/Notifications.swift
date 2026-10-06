@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct Notifications: View {
+    @State private var goNoNotifs = false
+    @State private var goFirst = false
+    
     var body: some View {
         VStack {
             PageBar(currentPage: 3, totalPages: 4, showBack: false)
@@ -26,13 +29,21 @@ struct Notifications: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
             Spacer()
-            CButton(text: "Turn on notifications", buttonType: .black, fullWidth: true, cornerRadius: 8){}
+            CButton(text: "Turn on notifications", buttonType: .black, fullWidth: true, cornerRadius: 8){
+                goFirst.toggle()
+            }
                 .padding()
             Button("Not now") {
-                
+                goNoNotifs.toggle()
             }
             .foregroundStyle(.black)
                 
+        }
+        .navigationDestination(isPresented: $goFirst) {
+            FirstApplication()
+        }
+        .navigationDestination(isPresented: $goNoNotifs) {
+            NoNotifs()
         }
     }
 }
