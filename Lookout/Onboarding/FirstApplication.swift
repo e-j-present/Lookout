@@ -12,6 +12,8 @@ struct FirstApplication: View {
     
     var body: some View {
         VStack {
+            PageBar(currentPage: 4, totalPages: 4, showBack: true)
+                .padding()
             Text("Add your first application")
                 .font(.system(size: 32))
                 .bold()

@@ -19,11 +19,13 @@ struct TimeLine: View {
     
     var body: some View {
         VStack {
+            PageBar(currentPage: 2, totalPages: 4, showBack: true)
+                .padding()
             Text("Set your timeline")
                 .font(.system(size: 40))
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                .padding(.horizontal)
             Text("We'll pace reminders and your dashboard around these dates.")
                 .font(.callout)
                 .foregroundStyle(.gray)

@@ -25,6 +25,8 @@ struct Roles: View {
     var body: some View {
         NavigationStack {
             VStack {
+                PageBar(currentPage: 1, totalPages: 4, showBack: false)
+                    .padding()
                 Text("What roles are you going for?")
                     .font(.system(size: 40))
                     .bold()

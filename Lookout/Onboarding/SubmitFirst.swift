@@ -17,6 +17,8 @@ struct SubmitFirst: View {
     
     var body: some View {
         VStack(spacing: 1) {
+            PageBar(currentPage: 4, totalPages: 4, showBack: true)
+                .padding()
             Text("Look right?")
                 .font(.system(size: 40))
                 .bold()

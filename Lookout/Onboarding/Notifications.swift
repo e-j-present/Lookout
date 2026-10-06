@@ -10,6 +10,8 @@ import SwiftUI
 struct Notifications: View {
     var body: some View {
         VStack {
+            PageBar(currentPage: 3, totalPages: 4, showBack: false)
+                .padding()
             Image(.turnOnNotifications)
                 .resizable()
                 .frame(width: 350, height: 225)
@@ -26,7 +28,10 @@ struct Notifications: View {
             Spacer()
             CButton(text: "Turn on notifications", buttonType: .black, fullWidth: true, cornerRadius: 8){}
                 .padding()
-            Text("Not now")
+            Button("Not now") {
+                
+            }
+            .foregroundStyle(.black)
                 
         }
     }
