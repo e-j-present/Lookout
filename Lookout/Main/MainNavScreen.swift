@@ -9,29 +9,31 @@ import SwiftUI
 
 
 enum MainScreen{
-    case dashboardEmpty
     case dashboard
-    case add
     case profile
 }
 
 struct MainNavScreen: View {
     
-    @State var screen: MainScreen = .dashboardEmpty
+    @State var screen: MainScreen = .dashboard
     @State var showAddSheet: Bool = false
+    @State var searchResults: String = ""
+    
+    var vm = ViewModel.shared
     
     var body: some View {
         VStack{
             // MARK: - Main Content
-            switch screen {
-            case .dashboardEmpty:
+            if screen == .dashboard && vm.jobs.isEmpty{
                 DashboardEmpty()
-            case .dashboard:
-                DashboardFirstRun(searchResults: .constant(""))
-            case .add:
-                EmptyView()
-            default:
+            } else if screen == .dashboard && !vm.jobs.isEmpty{
+                DashboardFirstRun(searchResults: $searchResults)
+            } else if screen == .profile{
+                Spacer()
                 Text("Not Yet Implemented")
+                    .font(.title)
+                    .fontWeight(.bold)
+                Spacer()
             }
             
             
@@ -44,7 +46,7 @@ struct MainNavScreen: View {
                 // MARK: - Dashboard
                 Button{
                     withAnimation {
-                        screen = screen == .dashboard ? .dashboardEmpty : .dashboard
+                        screen = .dashboard
                     }
                 } label: {
                     VStack{
@@ -79,7 +81,9 @@ struct MainNavScreen: View {
                 
                 // MARK: -  Profile
                 Button{
-                    
+                    withAnimation {
+                        screen = .profile
+                    }
                 } label: {
                     VStack{
                         Image(systemName: "person.crop.circle")
@@ -101,12 +105,44 @@ struct MainNavScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .sheet(isPresented: $showAddSheet) {
-            FirstApplication()
+            SheetView()
         }
 //        .border(.black)
     }
 }
 
+struct SheetView: View{
+    @Environment(\.dismiss) private var dismiss
+    var vm = ViewModel.shared
+    
+    var body: some View{
+        VStack{
+            HStack{
+                CButton(text: "Close", buttonType: .white, leadingImage: Image(systemName: "xmark")) {
+                    dismiss()
+                }
+                Spacer()
+            }
+            Spacer()
+            
+            
+            Text("Coming Soon")
+                .font(.title)
+                .fontWeight(.bold)
+            Text("In the future, you will be able to paste a link here to quickly add a job posting in addition to manually adding them. Right now the only feature is to manually add them.")
+            
+            CButton(text: "Enter details by hand", buttonType: .white, fullWidth: true) {
+                // TODO: Navigate to add screen
+                vm.go(to: .addScreen)
+            }
+            
+            Spacer()
+        }
+        .padding()
+    }
+}
+
 #Preview {
     MainNavScreen()
+//    SheetView()
 }

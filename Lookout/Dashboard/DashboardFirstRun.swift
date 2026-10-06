@@ -9,7 +9,16 @@ import SwiftUI
 
 struct DashboardFirstRun: View {
     
+    @State var showAlert: Bool = true
     @Binding var searchResults: String
+    let vm = ViewModel.shared
+    
+    // TODO: Unsure if these variables need to be @State
+    var savedCount = ViewModel.shared.jobs.filter{$0.status == .saved}.count
+    var appliedCount = ViewModel.shared.jobs.filter{$0.status == .applied}.count
+    var onlineAssesmentCount = ViewModel.shared.jobs.filter{$0.status == .onlineAssesment}.count
+    var interviewingCount = ViewModel.shared.jobs.filter{$0.status == .interviewing}.count
+    var offerCount = ViewModel.shared.jobs.filter{$0.status == .offer}.count
     
     var body: some View {
         ScrollView(.vertical) {
@@ -26,24 +35,29 @@ struct DashboardFirstRun: View {
                 //            .padding(.horizontal)
                 
                 // MARK: - You are all set
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("You're all set, Preston")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        Spacer()
-                        Image(systemName: "xmark")
+                if showAlert {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("You're all set, Preston")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                            Spacer()
+                            Button{
+                                showAlert = false
+                            } label: {
+                                Image(systemName: "xmark")
+                            }
+                        }
+                        
+                        Text("Your first application is saved. Tap + to paste your next link, and udpate stages as you hear back.")
                     }
-                    
-                    Text("Your first application is saved. Tap + to paste your next link, and udpate stages as you hear back.")
+                    .foregroundStyle(.white)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                        
+                    )
                 }
-                .foregroundStyle(.white)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                    
-                )
-                //            .padding(.horizontal)
                 
                 // MARK: - Search and Filter
                 HStack{
@@ -80,9 +94,18 @@ struct DashboardFirstRun: View {
                 
                 // MARK: - Analytic squares
                 HStack{
-                    AnalyticSquare(title: "Applied", count: 0)
-                    AnalyticSquare(title: "Interviewing", count: 0)
-                    AnalyticSquare(title: "Offers", count: 0)
+                    AnalyticSquare(
+                        title: "Applied",
+                        count: appliedCount
+                    )
+                    AnalyticSquare(
+                        title: "Interviewing",
+                        count: interviewingCount
+                    )
+                    AnalyticSquare(
+                        title: "Offers",
+                        count: offerCount
+                    )
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 
@@ -122,30 +145,32 @@ struct DashboardFirstRun: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                // MARK: Applications
+                // MARK: - Applications
                 VStack(alignment: .leading, spacing: 15){
                     HStack{
                         Text("Applications")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        Text("3")
+                        Text("\(vm.jobs.count)")
                             .foregroundStyle(.secondary)
                     }
                     
                     ScrollView(.horizontal) {
                         HStack{
-                            Chip(text: "All", chipType: .black)
-                            Chip(text: "Saved", chipType: .white)
-                            Chip(text: "Applied", chipType: .white)
-                            Chip(text: "Online assesment", chipType: .white)
-                            Chip(text: "Interviewed", chipType: .white)
+                            Chip(text: "All   \(vm.jobs.count)", chipType: .black)
+                            Chip(text: "Saved   \(savedCount)", chipType: .white)
+                            Chip(text: "Applied   \(appliedCount)", chipType: .white)
+                            Chip(text: "Online assesment   \(onlineAssesmentCount)", chipType: .white)
+                            Chip(text: "Interviewed   \(interviewingCount)", chipType: .white)
+                            Chip(text: "Offers   \(offerCount)", chipType: .white)
                         }
                     }
                     
                     VStack{
-                        SavedApplicationCard(role: "Associate Product Manager", company: "Google", source: "LinkedIn", reminder: "Added just now", tagText: "Applied", isFavorite: .constant(false))
-                        SavedApplicationCard(role: "Associate Product Manager", company: "Dell", source: "LinkedIn", reminder: "Added just now", tagText: "Applied", isFavorite: .constant(true))
-                        SavedApplicationCard(role: "Associate Product Manager", company: "Microsoft", source: "LinkedIn", reminder: "Added just now", tagText: "Applied", isFavorite: .constant(false))
+                        ForEach(vm.jobs, id: \.self){job in
+                            SavedApplicationCard(role: job.role, company: job.company, source: job.source, reminder: "Added just now", tagText: job.status.label, isFavorite: .constant(false))
+                        }
+                        
                     }
                     .frame(maxWidth: .infinity)
                 }

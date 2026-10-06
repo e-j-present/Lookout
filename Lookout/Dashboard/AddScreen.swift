@@ -9,11 +9,12 @@ import SwiftUI
 
 struct AddScreen: View {
     
-    @Binding var roleText: String
-    @Binding var companyText: String
-    @Binding var sourceText: String
+    @State var roleText: String = ""
+    @State var companyText: String = ""
+    @State var sourceText: String = ""
     
-    
+    let vm = ViewModel.shared
+    @State var selectedStage: JobStatus = .saved
     
     var body: some View {
         VStack(spacing: 25){
@@ -27,31 +28,51 @@ struct AddScreen: View {
             
             CTextField(label: "source", placeholder: "Where did you find this job?", text: $sourceText, inputType: .genericText)
             
+            VStack(alignment: .leading){
+                Text("Stage")
+                
+                FlowLayout{
+                    ForEach(JobStatus.allCases, id: \.self){ status in
+                        Chip(text: status.label, chipType: selectedStage == status ? .black : .white){
+                            withAnimation {
+                                selectedStage = status
+                            }
+                        }
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+//            .border(.black)
+            
             HStack{
                 Spacer()
                 
                 CButton(text: "Cancel", buttonType: .white, fullWidth: true) {
-                    
+                    withAnimation {
+                        roleText = ""
+                        companyText = ""
+                        sourceText = ""
+                        selectedStage = .saved
+                    }
                 }
                 
                 Spacer()
                 
                 CButton(text: "Save", buttonType: .black, fullWidth: true) {
-                    
+                    vm.createJob(job: Job(
+                        role: roleText,
+                        company: companyText,
+                        source: sourceText,
+                        status: selectedStage))
                 }
                 
                 Spacer()
             }
         }
         .padding()
-        .border(.black)
     }
 }
 
-#Preview {
-    @Previewable @State var roleText: String = ""
-    @Previewable @State var companyText: String = ""
-    @Previewable @State var sourceText: String = ""
-    
-    AddScreen(roleText: $roleText, companyText: $companyText, sourceText: $sourceText)
+#Preview {   
+    AddScreen()
 }

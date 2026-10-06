@@ -69,6 +69,7 @@ struct LogIn: View {
                     withAnimation {
                         showErrorMessage = false
                     }
+                    vm.go(to: .mainNavScreen)
                 } else{
                     print("Error")
                     

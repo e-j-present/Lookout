@@ -47,7 +47,7 @@ struct DashboardEmpty: View {
                     .fontWeight(.light)
                 
                 CButton(text: "Add application", buttonType: .black, leadingImage: Image(systemName: "plus")){
-                    
+                    ViewModel.shared.populateJobList()
                 }
             }
             .frame(maxWidth: .infinity)

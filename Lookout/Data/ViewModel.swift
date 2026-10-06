@@ -14,11 +14,47 @@ struct User{
     let email: String
     let password: String
 }
+
+enum JobStatus: CaseIterable{
+    case saved
+    case applied
+    case onlineAssesment
+    case interviewing
+    case offer
+    
+    var label: String{
+        switch self{
+        case .saved:
+            return "Saved"
+        case .applied:
+            return "Applied"
+        case .onlineAssesment:
+            return "Online Assesment"
+        case .interviewing:
+            return "Interviewing "
+        case .offer:
+            return "Offer"
+        @unknown default:
+            return "Unknown Status"
+        }
+    }
+}
+
+// store job related info
+struct Job: Hashable{
+    let role: String
+    let company: String
+    let source: String
+    var status: JobStatus
+}
+
 // Navigation screens
 enum Screen: Hashable{
     case createAccount
     case logIn
     case welcome
+    case mainNavScreen
+    case addScreen
 }
 
 // MARK: - Create Account Enum Errors
@@ -41,13 +77,19 @@ enum AccountErrors{
 // MARK: - View Model
 @Observable
 final class ViewModel {
+    // singleton class
     static let shared = ViewModel()
 
     // prevents external inits (ensures you always use shared)
     private init() {}
 
-    // list of users
+    // list of users with an account
     var users: [User] = [User(name: "John", email: "john@utexas.edu", password: "12345678")]
+    
+    var loggedInUser: User? = nil
+    
+    // list of jobs
+    var jobs: [Job] = []
 
     // list of navigations
     var navigationPath: [Screen] = []
@@ -61,6 +103,33 @@ final class ViewModel {
         } else {
             navigationPath[navigationPath.count - 1] = screen
         }
+    }
+    
+    // method to create a job
+    func createJob(job: Job){
+        jobs.append(job)
+    }
+    
+    // dummy method used for demostration that populates the jobs list with random data just to fill it
+    func populateJobList(){
+        let roles = ["iOS Developer", "Software Engineer", "Frontend Engineer", "Backend Developer", "Mobile Engineer", "Data Scientist", "Product Manager"]
+        let companies = ["Apple", "Google", "Meta", "Netflix", "Amazon", "Spotify", "Stripe", "Airbnb", "Uber", "Lyft", "Microsoft"]
+        let sources = ["LinkedIn", "Indeed", "Handshake"]
+        let statuses = JobStatus.allCases
+        
+        var dummyJobs: [Job] = []
+        
+        for _ in 1...20 {
+            let randomRole = roles.randomElement() ?? "Software Engineer"
+            let randomCompany = companies.randomElement() ?? "Tech Corp"
+            let randomSource = sources.randomElement() ?? "LinkedIn"
+            let randomStatus = statuses.randomElement() ?? .saved
+            
+            let job = Job(role: randomRole, company: randomCompany, source: randomSource, status: randomStatus)
+            dummyJobs.append(job)
+        }
+        
+        jobs = dummyJobs
     }
     
     // create an account, first checks user information (ie email not empty, password is good) and displays a UI element if there is an error

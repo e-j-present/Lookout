@@ -64,6 +64,10 @@ struct Welcome: View {
                     LogIn()
                 case .welcome:
                     Welcome()
+                case .mainNavScreen:
+                    MainNavScreen()
+                case .addScreen:
+                    AddScreen()
                 }
             }
         }
