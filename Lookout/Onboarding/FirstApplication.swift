@@ -2,9 +2,6 @@
 //  FirstApplication.swift
 //  Lookout
 //
-//  Created by Brett Sestak on 10/5/26.
-//
-
 import SwiftUI
 
 struct FirstApplication: View {

@@ -2,14 +2,12 @@
 //  Welcome.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/2/26.
 //
-
 import SwiftUI
 
 struct Welcome: View {
 
-    @Bindable var vm = ViewModel.shared
+    let vm = ViewModel.shared
 
     var body: some View {
         VStack(spacing: 8){
@@ -34,7 +32,6 @@ struct Welcome: View {
 
             Spacer()
 
-
             CButton(text: "Get started", buttonType: .black, fullWidth: true, cornerRadius: 8) {
                 vm.push(.createAccount)
             }
@@ -50,8 +47,6 @@ struct Welcome: View {
                 .font(.subheadline)
                 .fontWeight(.semibold)
             }
-
-
         }
         .padding(.horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

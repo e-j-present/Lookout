@@ -2,19 +2,12 @@
 //  MainNavScreen.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/6/26.
-//
-
 import SwiftUI
-
-
 enum MainScreen{
     case dashboard
     case profile
 }
-
 struct MainNavScreen: View {
-    
     @State var screen: MainScreen = .dashboard
     @State var showAddSheet: Bool = false
     @State var searchResults: String = ""
@@ -35,9 +28,7 @@ struct MainNavScreen: View {
                     .fontWeight(.bold)
                 Spacer()
             }
-            
-            
-            // nav bar
+            // MARK: - nav bar
             Divider()
                 .padding(.vertical, 5)
             HStack{
@@ -57,7 +48,6 @@ struct MainNavScreen: View {
                     }
                     .foregroundStyle(.black)
                 }
-                
                 Spacer()
                 
                 // MARK: - Add screen
@@ -89,7 +79,6 @@ struct MainNavScreen: View {
                                 showAddSheet = true
                             }
                     )
-                
                 Spacer()
                 
                 // MARK: -  Profile
@@ -110,18 +99,12 @@ struct MainNavScreen: View {
                 Spacer()
             }
             .frame(maxWidth: .infinity)
-//            .border(.blue)
-            
-            
-            
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showAddSheet) {
             SheetView()
         }
-//        .border(.black)
     }
 }
 
@@ -139,7 +122,6 @@ struct SheetView: View{
             }
             Spacer()
             
-            
             Text("Coming Soon")
                 .font(.title)
                 .fontWeight(.bold)
@@ -149,15 +131,12 @@ struct SheetView: View{
                 dismiss()
                 vm.push(.addScreen)
             }
-            
             Spacer()
         }
         .padding()
-        
     }
 }
 
 #Preview {
     MainNavScreen()
-//    SheetView()
 }

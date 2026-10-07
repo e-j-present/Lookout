@@ -2,9 +2,7 @@
 //  CreateAccount.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/3/26.
 //
-
 import SwiftUI
 
 enum PasswordStrength: Int {
@@ -47,7 +45,6 @@ struct CreateAccount: View {
     @State var errorTitle: String = "Couldn't Connect"
     @State var errorMessage: String = "Check your connection and try again. Your info is still here."
 
-    
     let passwordOriginalHintMessage: String = "Use 8+ characters with a number or symbol"
     @State var passwordHintMessage: String = "Use 8+ characters with a number or symbol"
     @State var passwordShowErrorMessage: Bool = false
@@ -67,6 +64,7 @@ struct CreateAccount: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16){
+            // MARK: - Title/subtitle
             VStack(alignment: .leading){
                 Text("Create your account")
                     .font(.title)
@@ -75,7 +73,8 @@ struct CreateAccount: View {
                 Text("Track every application and get a heads-up before anything's due.")
                     .foregroundStyle(.secondary)
             }
-            
+            // MARK: - Error Alerts
+            // if there is an error, display the alert
             if showErrorMessage{
                 VStack(alignment: .leading){
                     Text(errorTitle)
@@ -92,7 +91,7 @@ struct CreateAccount: View {
                         .fill(.quinary)
                 )
             }
-            
+            // MARK: - Text Fields
             CTextField(label: "First Name", placeholder: "First name", text: $firstName, inputType: .firstName)
             CTextField(label: "Email", placeholder: "you@school.edu", text: $email, inputType: .email)
             CTextField(label: "Password", placeholder: "Create a password", text: $password, inputType: .password, hint: passwordHintMessage, showErrorMessage: passwordShowErrorMessage)
@@ -114,10 +113,8 @@ struct CreateAccount: View {
             }
             
             CButton(text: "Create account", buttonType: .black, fullWidth: true) {
-
                 vm.createAccount(firstName: firstName, email: email, password: password, passwordStrength: passwordStrength) { code in
                     if case .emptyAccountInfo(let emptyAccountInfo) = code {
-                        print(emptyAccountInfo)
                         withAnimation {
                             switch emptyAccountInfo{
                             case .name:
@@ -135,7 +132,6 @@ struct CreateAccount: View {
                             default:
                                 showErrorMessage = false
                             }
-
                         }
                     }
 
@@ -156,7 +152,7 @@ struct CreateAccount: View {
 
                 }
 
-                // account created with no validation errors: start onboarding fresh, with no way back to account creation
+                // account created with no errors
                 if !showErrorMessage && !passwordShowErrorMessage {
                     vm.setRoot(.roles)
                 }

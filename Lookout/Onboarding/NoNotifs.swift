@@ -2,9 +2,6 @@
 //  NoNotifs.swift
 //  Lookout
 //
-//  Created by Brett Sestak on 10/6/26.
-//
-
 import SwiftUI
 
 struct NoNotifs: View {

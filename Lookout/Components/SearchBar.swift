@@ -2,11 +2,6 @@
 //  SearchBar.swift
 //  Lookout
 //
-//  Created by Brett Sestak on 10/4/26.
-//
-
-import SwiftUI
-
 import SwiftUI
 
 /// A simple searchbar that features a magnifying glass and optional text
@@ -41,7 +36,7 @@ struct SearchBar: View {
 }
 
 #Preview {
-    @State var text: String = ""
+    @Previewable @State var text: String = ""
     
     SearchBar(text: $text, icon: "magnifyingglass", placeholder: "Search 2")
 }

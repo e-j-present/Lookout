@@ -2,13 +2,9 @@
 //  LogIn.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/4/26.
 //
-
 import SwiftUI
-
 struct LogIn: View {
-
     var vm = ViewModel.shared
 
     @State var firstName: String = ""
@@ -50,7 +46,6 @@ struct LogIn: View {
 
             HStack{
                 Spacer()
-                
                 Button{
                     
                 } label: {
@@ -60,33 +55,27 @@ struct LogIn: View {
                         .foregroundStyle(.black)
                 }
             }
-            
             CButton(text: "Log in", buttonType: .black, fullWidth: true) {
                 let LoginResults = vm.login(email: email, password: password)
                 
                 if LoginResults{
-                    print("Succesfully Singed in")
                     withAnimation {
                         showErrorMessage = false
                     }
                     vm.setRoot(.mainNavScreen)
                 } else{
-                    print("Error")
-                    
                     withAnimation {
                         errorTitle = "Incorrect email or password"
                         errorMessage = "The email or password your provided was incorrect. Try again"
                         showErrorMessage = true
                     }
                 }
-                
             }
             
             Spacer()
             
             HStack(spacing: 5){
                 Spacer()
-                
                 Text("New to Lookout?")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -96,7 +85,6 @@ struct LogIn: View {
                 .foregroundStyle(.black)
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                
                 Spacer()
             }
         }

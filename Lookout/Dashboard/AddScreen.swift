@@ -2,13 +2,9 @@
 //  AddScreen.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/6/26.
-//
-
 import SwiftUI
 
 struct AddScreen: View {
-    
     @State var roleText: String = ""
     @State var companyText: String = ""
     @State var sourceText: String = ""
@@ -42,17 +38,13 @@ struct AddScreen: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-//            .border(.black)
             
             HStack{
                 Spacer()
-                
                 CButton(text: "Cancel", buttonType: .white, fullWidth: true) {
                     vm.pop()
                 }
-
                 Spacer()
-
                 CButton(text: "Save", buttonType: .black, fullWidth: true) {
                     vm.createJob(job: Job(
                         role: roleText,
@@ -61,7 +53,6 @@ struct AddScreen: View {
                         status: selectedStage))
                     vm.pop()
                 }
-
                 Spacer()
             }
         }

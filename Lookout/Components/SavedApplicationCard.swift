@@ -2,9 +2,6 @@
 //  SavedApplicationCard.swift
 //  Lookout
 //
-//  Created by Ethan Present on 9/30/26.
-//
-
 import SwiftUI
 
 enum SavedApplicationCardAction{
@@ -13,7 +10,6 @@ enum SavedApplicationCardAction{
 }
 
 /// Card used for applications throughout the dashboard.
-/// Github Issue Link: https://github.com/e-j-present/Lookout/issues/19
 struct SavedApplicationCard: View {
     /// The role that the user is applying to. This is the main title
     var role: String
@@ -40,7 +36,6 @@ struct SavedApplicationCard: View {
     /// }
     /// ```
     var getID: ((UUID, SavedApplicationCardAction) -> Void)? = nil
-    
     
     var body: some View {
         HStack(spacing: 12) {
@@ -114,7 +109,6 @@ struct SavedApplicationCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(.gray, lineWidth: 1)
         )
-//        .padding(.horizontal)
         .frame(maxWidth: .infinity)
         .frame(height: 120)
         .contentShape(Rectangle())

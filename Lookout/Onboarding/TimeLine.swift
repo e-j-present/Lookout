@@ -2,9 +2,6 @@
 //  TimeLine.swift
 //  Lookout
 //
-//  Created by Brett Sestak on 10/4/26.
-//
-
 import SwiftUI
 
 struct TimeLine: View {

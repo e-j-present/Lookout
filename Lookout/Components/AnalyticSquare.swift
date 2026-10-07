@@ -2,13 +2,12 @@
 //  AnalyticSquare.swift
 //  Lookout
 //
-//  Created by Ethan Present on 9/28/26.
-//
 
 import SwiftUI
 
+/// Component used in the dashboard. Displays the count of jobs with a specific stage
 struct AnalyticSquare: View {
-    
+    /// title/stage of the component
     let title: String
     let count: Int
     

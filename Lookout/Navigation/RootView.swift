@@ -2,16 +2,10 @@
 //  RootView.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/6/26.
-//
 //  The app's single NavigationStack. Every screen is reachable by adding
-//  a case to Screen and a branch below - no other view should declare its
-//  own NavigationStack or navigationDestination.
-
+//  a case to Screen and a branch below - no other view should declare its own NavigationStack or navigationDestination.
 import SwiftUI
-
 struct RootView: View {
-
     @Bindable var vm = ViewModel.shared
 
     var body: some View {

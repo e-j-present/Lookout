@@ -2,19 +2,17 @@
 //  ViewModel.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/4/26.
-//
-
 import Foundation
 import Observation
 
-// store key user info
+// MARK: - User Enum
 struct User{
     let name: String
     let email: String
     let password: String
 }
 
+// MARK: - Job Related Enums
 enum JobStatus: CaseIterable{
     case saved
     case applied
@@ -49,17 +47,23 @@ struct Job: Hashable{
 }
 
 // MARK: - Create Account Enum Errors
+/// One of the fields below is missing information
 enum EmptyAccountInfo{
     case name
     case email
     case password
+    /// resets the UI when there are no issues
     case reset
 }
+/// Password specific issues. Right now it only checks if the password is weak.
+/// In the future this is where it will check if contains the right amount of characters, special characters, etc.
 enum PasswordInfo{
     case weak
+    /// resets the UI when there are no  issues
     case reset
 }
-// main enum for account errors. Everything above are subtypes
+/// When creating an accout, an AccountError can generate.
+/// Each Account Error will have a sub type with additional information
 enum AccountErrors{
     case emptyAccountInfo(EmptyAccountInfo)
     case passwordInfo(PasswordInfo)
@@ -77,6 +81,7 @@ final class ViewModel {
     // list of users with an account
     var users: [User] = [User(name: "John", email: "john@utexas.edu", password: "12345678")]
     
+    // current signed in user. Nil means no user is signed in
     var loggedInUser: User? = nil
     
     // list of jobs
@@ -89,50 +94,49 @@ final class ViewModel {
     func createJob(job: Job){
         jobs.append(job)
     }
-    
     // dummy method used for demostration that populates the jobs list with random data just to fill it
     func populateJobList(){
         let roles = ["iOS Developer", "Software Engineer", "Frontend Engineer", "Backend Developer", "Mobile Engineer", "Data Scientist", "Product Manager"]
         let companies = ["Apple", "Google", "Meta", "Netflix", "Amazon", "Spotify", "Stripe", "Airbnb", "Uber", "Lyft", "Microsoft"]
         let sources = ["LinkedIn", "Indeed", "Handshake"]
         let statuses = JobStatus.allCases
-        
         var dummyJobs: [Job] = []
         
         for _ in 1...20 {
-            let randomRole = roles.randomElement() ?? "Software Engineer"
-            let randomCompany = companies.randomElement() ?? "Tech Corp"
-            let randomSource = sources.randomElement() ?? "LinkedIn"
-            let randomStatus = statuses.randomElement() ?? .saved
+            let randomRole = roles.randomElement()!
+            let randomCompany = companies.randomElement()!
+            let randomSource = sources.randomElement()!
+            let randomStatus = statuses.randomElement()!
             
             let job = Job(role: randomRole, company: randomCompany, source: randomSource, status: randomStatus)
             dummyJobs.append(job)
         }
-        
         jobs = dummyJobs
     }
     // dummy method used for demostration that removes all jobs from the list
     func clearJobList(){
         jobs = []
     }
-    
     // create an account, first checks user information (ie email not empty, password is good) and displays a UI element if there is an error
     func createAccount(firstName: String, email: String, password: String, passwordStrength: PasswordStrength, UIElement: (AccountErrors) -> Void){
-        if firstName.isEmpty { UIElement(.emptyAccountInfo(.name))}
-        else if email.isEmpty { UIElement(.emptyAccountInfo(.email))}
-        else if password.isEmpty { UIElement(.emptyAccountInfo(.password))}
+        if firstName.isEmpty { UIElement(.emptyAccountInfo(.name)); return }
+        else if email.isEmpty { UIElement(.emptyAccountInfo(.email)); return }
+        else if password.isEmpty { UIElement(.emptyAccountInfo(.password)); return}
         else {UIElement(.emptyAccountInfo(.reset))}
         
-        if passwordStrength == .weak && !password.isEmpty { UIElement(.passwordInfo(.weak))}
+        if passwordStrength == .weak && !password.isEmpty { UIElement(.passwordInfo(.weak)); return}
         else { UIElement(.passwordInfo(.reset))}
         
+        let user = User(name: firstName, email: email, password: password)
+        users.append(user)
+        loggedInUser = user
         
-        users.append(User(name: firstName, email: email, password: password))
     }
     // login method, returns true on success, false otherwise
     func login(email: String, password: String) -> Bool{
         for user in users{
             if user.email == email && user.password == password{
+                loggedInUser = user
                 return true
             }
         }

@@ -2,24 +2,32 @@
 //  Chip.swift
 //  Lookout
 //
-//  Created by Ethan Present on 9/28/26.
-//
 import SwiftUI
 
-// different types of Chips based on figma
+/// The style of chip
 enum ChipType {
-    case black, white, bordered, gray, gray_red
+    /// black background, white text
+    case black
+    /// white background, black text, gray border
+    case white
+    /// white background, black text, gray dashed border
+    case bordered
+    /// gray background, black text
+    case gray
+    /// gray background, red text
+    case gray_red
 }
 
+/// Capsule-shaped component with text. Can be clickable
 struct Chip: View {
     let text: String
+    /// Style of the Chip: black, white, bordered, gray, gray_red
     let chipType: ChipType
-
     var horizontalPadding: CGFloat = 16
     var verticalPadding: CGFloat = 8
+    /// optional leading image
     var leadingImage: Image? = nil
-
-    // Optional action for button chips
+    /// Optional action for button chips
     var buttonAction: (() -> Void)? = nil
 
     // view builder lets you return multiple types of views
@@ -30,31 +38,26 @@ struct Chip: View {
         case .black:
             Capsule()
                 .fill(.black)
-
         case .white:
             Capsule()
                 .fill(.white)
                 .stroke(.gray, lineWidth: 1.0)
-
         case .bordered:
             Capsule()
                 .fill(.white)
                 .stroke(.gray, style: StrokeStyle(lineWidth: 1.5, dash: [10]))
-
         case .gray, .gray_red:
             Capsule()
                 .fill(.quinary)
         }
     }
-
+    
     private var textColor: Color {
         switch chipType {
         case .black:
             return .white
-
         case .gray_red:
             return .red
-
         default:
             return .black
         }

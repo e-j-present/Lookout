@@ -2,14 +2,9 @@
 //  FlowLayout.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/6/26.
-//
-
 import SwiftUI
-
-// custom container that can be used like a vstack or hstack
-// this container places items horizontally like an hstack
-// but auto wraps content that exceeds the width of the container
+/// custom container that places items horizontally like an hstack
+/// but auto wraps content that exceeds the width of the container
 struct FlowLayout: Layout {
     var horizontalSpacing: CGFloat = 8
     var verticalSpacing: CGFloat = 8
@@ -37,7 +32,6 @@ struct FlowLayout: Layout {
             rowHeight = max(rowHeight, size.height)
             currentX += horizontalSpacing
         }
-        
         return CGSize(
             width: proposal.width ?? totalWidth,
             height: currentY + rowHeight
@@ -69,12 +63,10 @@ struct FlowLayout: Layout {
             rowheight = max(rowheight, size.height)
         }
     }
-    
 }
 
-
 #Preview {
-    let items = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+    let items = ["one", "two", "long text", "three", "four", "longer text...", "five", "0", "six", "seven", "eight", "nine", "ten"]
     
     FlowLayout(horizontalSpacing: 16, verticalSpacing: 12){
         ForEach(items, id: \.self){ item in
@@ -88,4 +80,3 @@ struct FlowLayout: Layout {
     .frame(width: 250)
     .border(.black)
 }
-

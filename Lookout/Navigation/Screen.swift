@@ -2,9 +2,6 @@
 //  Screen.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/6/26.
-//
-
 import Foundation
 
 // Every destination that can be pushed onto the app's single navigation stack.

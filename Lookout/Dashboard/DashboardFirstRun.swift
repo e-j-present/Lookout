@@ -2,9 +2,6 @@
 //  DashboardFirstRun.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/2/26.
-//
-
 import SwiftUI
 
 struct DashboardFirstRun: View {
@@ -12,13 +9,17 @@ struct DashboardFirstRun: View {
     @State var showAlert: Bool = true
     @Binding var searchResults: String
     let vm = ViewModel.shared
-    
-    // TODO: Unsure if these variables need to be @State
-    var savedCount = ViewModel.shared.jobs.filter{$0.status == .saved}.count
-    var appliedCount = ViewModel.shared.jobs.filter{$0.status == .applied}.count
-    var onlineAssesmentCount = ViewModel.shared.jobs.filter{$0.status == .onlineAssesment}.count
-    var interviewingCount = ViewModel.shared.jobs.filter{$0.status == .interviewing}.count
-    var offerCount = ViewModel.shared.jobs.filter{$0.status == .offer}.count
+    var userName: String{
+        if let user = vm.loggedInUser{
+            return user.name
+        }
+        return "User"
+    }
+    @State var savedCount = ViewModel.shared.jobs.filter{$0.status == .saved}.count
+    @State var appliedCount = ViewModel.shared.jobs.filter{$0.status == .applied}.count
+    @State var onlineAssesmentCount = ViewModel.shared.jobs.filter{$0.status == .onlineAssesment}.count
+    @State var interviewingCount = ViewModel.shared.jobs.filter{$0.status == .interviewing}.count
+    @State var offerCount = ViewModel.shared.jobs.filter{$0.status == .offer}.count
     
     var body: some View {
         ScrollView(.vertical) {
@@ -32,13 +33,12 @@ struct DashboardFirstRun: View {
                     Spacer()
                     Chip(text: "11 wks to offer goal", chipType: .white)
                 }
-                //            .padding(.horizontal)
                 
                 // MARK: - You are all set
                 if showAlert {
                     VStack(alignment: .leading) {
                         HStack {
-                            Text("You're all set, Preston")
+                            Text("You're all set, \(userName)")
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             Spacer()
@@ -48,14 +48,12 @@ struct DashboardFirstRun: View {
                                 Image(systemName: "xmark")
                             }
                         }
-                        
                         Text("Your first application is saved. Tap + to paste your next link, and udpate stages as you hear back.")
                     }
                     .foregroundStyle(.white)
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                        
                     )
                 }
                 
@@ -66,7 +64,6 @@ struct DashboardFirstRun: View {
                             .foregroundStyle(.tertiary)
                         TextField("Search Company or role", text: $searchResults)
                     }
-                    
                     .padding()
                     .frame(maxHeight: .infinity)
                     .overlay(
@@ -85,9 +82,7 @@ struct DashboardFirstRun: View {
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(lineWidth: 1)
                                     .foregroundStyle(Color(.tertiaryLabel))
-                                
                             )
-                        
                     }
                 }
                 .fixedSize(horizontal: false, vertical: true)
@@ -109,7 +104,6 @@ struct DashboardFirstRun: View {
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 
-                
                 // MARK: - Reminders
                 VStack(alignment: .leading, spacing: 15){
                     HStack{
@@ -119,7 +113,6 @@ struct DashboardFirstRun: View {
                         Text(" ")
                             .foregroundStyle(.secondary)
                     }
-                    
                     HStack{
                         Image(systemName: "circle.fill")
                             .resizable()
@@ -176,10 +169,6 @@ struct DashboardFirstRun: View {
                 }
                 .scrollIndicators(.never)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                
-                
-                
-                
             }
             .padding(.vertical)
             .padding(.horizontal)

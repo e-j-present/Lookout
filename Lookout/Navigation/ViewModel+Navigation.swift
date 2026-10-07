@@ -2,17 +2,13 @@
 //  ViewModel+Navigation.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/6/26.
-//
-//  All navigation logic for the app lives here so every screen drives
-//  navigation through the ViewModel instead of managing its own state.
-//  RootView owns the single NavigationStack bound to `vm.path`; these
-//  methods are the only thing that should ever mutate it.
-
 import Foundation
 
+//  All navigation logic for the app lives here so every screen drives
+//  navigation through the ViewModel instead of managing its own state.
+//  RootView owns the single NavigationStack bound to `vm.path`. These
+//  methods are the only thing that should ever mutate it.
 extension ViewModel {
-
     // Pushes a new screen on top of the stack. Use this for normal
     // "forward" navigation where the user should be able to go back.
     func push(_ screen: Screen) {
@@ -20,7 +16,7 @@ extension ViewModel {
     }
 
     // Pops the top screen off the stack. Use this for custom back
-    // controls (e.g. PageBar's back chevron) or "Cancel"/"Save" buttons
+    // controls (i.e. PageBar's back chevron) or "Cancel"/"Save" buttons
     // that should return to the previous screen.
     func pop() {
         guard !path.isEmpty else { return }

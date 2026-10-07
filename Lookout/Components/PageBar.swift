@@ -2,9 +2,6 @@
 //  PageBar.swift
 //  Lookout
 //
-//  Created by Brett Sestak on 10/6/26.
-//
-
 import SwiftUI
 
 /// Displays which page of the onboarding process the user is in. Every bar up to and including current page will be filled in black while the rest are light gray
