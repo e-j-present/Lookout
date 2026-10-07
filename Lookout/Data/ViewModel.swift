@@ -39,11 +39,12 @@ enum JobStatus: CaseIterable{
 }
 
 // store job related info
-struct Job: Hashable{
+struct Job: Identifiable{
     let role: String
     let company: String
     let source: String
     var status: JobStatus
+    let id = UUID()
 }
 
 // MARK: - Create Account Enum Errors

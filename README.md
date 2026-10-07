@@ -32,7 +32,7 @@ We decided to create components because many UI elements are reused throughout t
     - Asks the user for their first name, email, and password. If any of these fields are left empty, a UI element appears letting the user know that they must type something.
     - Once the user starts typing a password, a password strength bar appears. Right now, it is based on the password length. You must type a password stronger than weak to proceed. If not, red text below the text field will appear. 
     - If you remember that you actually have a login, you can go directly to the login screen without having to go back to the welcome screen
-    - If you go to the login screen from here, pushing the back button will skip going back to the create account screen and will take you directly back to the welcome screen
+        - If you go to the login screen from here, pushing the back button will skip going back to the create account screen and will take you directly back to the welcome screen
     - After successfully creating an account, you will be taken to the onboarding screen
 - Log in
     - Asks the user for their email and password. 

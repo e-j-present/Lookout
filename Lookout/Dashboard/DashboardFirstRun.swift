@@ -15,11 +15,11 @@ struct DashboardFirstRun: View {
         }
         return "User"
     }
-    @State var savedCount = ViewModel.shared.jobs.filter{$0.status == .saved}.count
-    @State var appliedCount = ViewModel.shared.jobs.filter{$0.status == .applied}.count
-    @State var onlineAssesmentCount = ViewModel.shared.jobs.filter{$0.status == .onlineAssesment}.count
-    @State var interviewingCount = ViewModel.shared.jobs.filter{$0.status == .interviewing}.count
-    @State var offerCount = ViewModel.shared.jobs.filter{$0.status == .offer}.count
+    var savedCount = ViewModel.shared.jobs.filter{$0.status == .saved}.count
+    var appliedCount = ViewModel.shared.jobs.filter{$0.status == .applied}.count
+    var onlineAssesmentCount = ViewModel.shared.jobs.filter{$0.status == .onlineAssesment}.count
+    var interviewingCount = ViewModel.shared.jobs.filter{$0.status == .interviewing}.count
+    var offerCount = ViewModel.shared.jobs.filter{$0.status == .offer}.count
     
     var body: some View {
         ScrollView(.vertical) {
@@ -160,7 +160,7 @@ struct DashboardFirstRun: View {
                     }
                     
                     VStack{
-                        ForEach(vm.jobs, id: \.self){job in
+                        ForEach(vm.jobs){job in
                             SavedApplicationCard(role: job.role, company: job.company, source: job.source, reminder: "Added just now", tagText: job.status.label, isFavorite: .constant(false))
                         }
                         
