@@ -1,4 +1,5 @@
 # Lookout
+*For best results, we ran the app on the iPhone 17 Pro.*
 
 We decided to create components because many UI elements are reused throughout the project. 
 
