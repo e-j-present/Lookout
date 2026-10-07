@@ -40,18 +40,18 @@ We decided to create components because many UI elements are reused throughout t
         - **Email: john@utexas.edu**
         - **Password: 12345678**
     - If you log in, you will skip the onboarding pipeline and be taken directly to MainNavScreen
-- FirstApplication
-    - In onboarding, the very first application they will add to the app. Asks for a link to the job posting to auto-fill in data. Doesn’t actually add the job for the purpose of showing what an empty dashboard looks like. 
-- NoNotifs
-    - Asks the user if they are sure they do not want any notifications from the app
-- Notifications
-    - Prompts the user to allow notifications to get reminders. If they select allow it takes them to FirstApplication. If they do not allow it takes them to NoNotifs.
 - Roles
     - Lets the user select which roles they are interested in
-- SubmitFirst
-    - After fetching data from the link in FirstApplication, lets the user review information to ensure accuracy and select the stage in the process they are at.
 - TimeLine
     - The user enters their graduation date and when they would like to have an offer by. They also select where in the application / recruiting process they are at.
+- Notifications
+    - Prompts the user to allow notifications to get reminders. If they select allow it takes them to FirstApplication. If they do not allow it takes them to NoNotifs.
+- NoNotifs
+    - Asks the user if they are sure they do not want any notifications from the app
+- FirstApplication
+    - In onboarding, the very first application they will add to the app. Asks for a link to the job posting to auto-fill in data. Doesn’t actually add the job for the purpose of showing what an empty dashboard looks like. 
+- SubmitFirst
+    - After fetching data from the link in FirstApplication, lets the user review information to ensure accuracy and select the stage in the process they are at.
 - Main Nav Screen
     - The main screen of the app
     - Shows DashboardEmpty when the user has no jobs created
