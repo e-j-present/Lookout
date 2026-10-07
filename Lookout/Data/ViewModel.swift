@@ -120,14 +120,32 @@ final class ViewModel {
     }
     // create an account, first checks user information (ie email not empty, password is good) and displays a UI element if there is an error
     func createAccount(firstName: String, email: String, password: String, passwordStrength: PasswordStrength, UIElement: (AccountErrors) -> Void){
-        if firstName.isEmpty { UIElement(.emptyAccountInfo(.name)); return }
-        else if email.isEmpty { UIElement(.emptyAccountInfo(.email)); return }
-        else if password.isEmpty { UIElement(.emptyAccountInfo(.password)); return}
-        else {UIElement(.emptyAccountInfo(.reset))}
+        var isError = false
+        if firstName.isEmpty{
+            isError = true
+            UIElement(.emptyAccountInfo(.name))
+        }
+        else if email.isEmpty{
+            isError = true
+            UIElement(.emptyAccountInfo(.email))
+        }
+        else if password.isEmpty{
+            isError = true
+            UIElement(.emptyAccountInfo(.password))
+        }
+        else {
+            UIElement(.emptyAccountInfo(.reset))
+        }
         
-        if passwordStrength == .weak && !password.isEmpty { UIElement(.passwordInfo(.weak)); return}
-        else { UIElement(.passwordInfo(.reset))}
+        if passwordStrength == .weak && !password.isEmpty{
+            isError = true
+            UIElement(.passwordInfo(.weak))
+        }
+        else{
+            UIElement(.passwordInfo(.reset))
+        }
         
+        guard !isError else {return}
         let user = User(name: firstName, email: email, password: password)
         users.append(user)
         loggedInUser = user
