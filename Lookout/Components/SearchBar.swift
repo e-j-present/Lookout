@@ -9,10 +9,13 @@ import SwiftUI
 
 import SwiftUI
 
+/// A simple searchbar that features a magnifying glass and optional text
 struct SearchBar: View {
+    /// the text the user enters
     @Binding var text: String
-    
+    /// the icon displayed on the lefthand side
     var icon: String = "magnifyingglass"
+    /// the default text displayed
     var placeholder: String = "Search"
     
     var body: some View {

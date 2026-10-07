@@ -7,9 +7,13 @@
 
 import SwiftUI
 
+/// Displays which page of the onboarding process the user is in. Every bar up to and including current page will be filled in black while the rest are light gray
 struct PageBar: View {
+    /// the current page the user is on
     let currentPage: Int
+    /// the total number of bars to be displayed
     let totalPages: Int
+    /// whether or not to show the back button
     let showBack: Bool
     var onBack: (() -> Void)? = nil
 

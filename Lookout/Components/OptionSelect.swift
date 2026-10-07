@@ -7,8 +7,11 @@
 
 import SwiftUI
 
+/// Creates a selectable option that fills in a circle if selected
 struct OptionSelect: View {
+    /// the main text displayed
     let title: String
+    /// subtext displayed
     let subTitle: String
 
     @Binding var isSelected: Bool
@@ -29,14 +32,14 @@ struct OptionSelect: View {
                             lineWidth: 4
                         )
                         .frame(width: 30, height: 30)
-
+                    // fills in the circle
                     if isSelected {
                         Circle()
                             .fill(Color.primary)
                             .frame(width: 15, height: 15)
                     }
                 }
-
+                // displays the text 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(subTitle)
                         .font(.title3)

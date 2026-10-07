@@ -7,9 +7,12 @@
 
 import SwiftUI
 
+/// Creates a dropdown menu that when clicked displays the iOS calendar picker. The text displayed is the month and year selected
 struct DateDropdown: View {
+    
     @Binding var date: Date
     
+    /// title displayed above the box
     var title: String = "Graduation"
     
     @State private var showingDatePicker = false
@@ -24,6 +27,7 @@ struct DateDropdown: View {
             Button {
                 showingDatePicker = true
             } label: {
+                // gets the date on one side and the down arrow on the other
                 HStack {
                     Text(date.formatted(.dateTime.month(.wide).year()))
                         .font(.system(size: 22))
@@ -49,6 +53,7 @@ struct DateDropdown: View {
             }
             .buttonStyle(.plain)
         }
+        /// the iOS calendar that is showed when clicked
         .sheet(isPresented: $showingDatePicker) {
             VStack {
                 DatePicker(
