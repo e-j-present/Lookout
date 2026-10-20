@@ -42,7 +42,7 @@ struct LogIn: View {
             }
             
             CTextField(label: "Email", placeholder: "you@school.edu", text: $email, inputType: .email)
-            CTextField(label: "Password", placeholder: "Create a password", text: $password, inputType: .password)
+            CTextField(label: "Password", placeholder: "Enter password", text: $password, inputType: .password)
 
             HStack{
                 Spacer()

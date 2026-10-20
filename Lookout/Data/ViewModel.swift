@@ -61,6 +61,17 @@ enum JobSource: CaseIterable, Hashable{
         }
     }
     
+    /// Equality used for filtering. Every `.other(...)` counts as the same source,
+    /// so the "Other" filter chip matches any custom source regardless of its text.
+    func isSameSource(as source: JobSource) -> Bool {
+        switch (self, source) {
+        case (.other, .other):
+            return true
+        default:
+            return self == source
+        }
+    }
+
     static func stringToJobSource(_ string: String) -> JobSource {
         switch string.lowercased() {
         case "linkedin":
@@ -252,6 +263,27 @@ struct Reminder: Identifiable{
     }
 }
 
+// MARK: - Uploadable Material Struct
+enum MaterialType: String{
+    case resume = "Resume"
+    case coverLetter = "Cover letter"
+}
+
+struct Material: Identifiable{
+    var title: String
+    var type: MaterialType
+    var date: Date
+    var id = UUID()
+    
+    var uploadedDate: String{
+        return date.formatted(
+            .dateTime
+            .month(.abbreviated)
+            .day(.twoDigits)
+        )
+    }
+}
+
 // MARK: - Create Account Enum Errors
 /// One of the fields below is missing information
 enum EmptyAccountInfo{
@@ -306,6 +338,10 @@ final class ViewModel {
     var searchText: String = ""
     
     var reminders: [Reminder] = []
+    var uploadedMaterials: [Material] = [
+        Material(title: "My_Resume.pdf", type: .resume, date: Calendar.current.date(byAdding: .day, value: -5, to: Date())!),
+        Material(title: "Google_CoverLetter.pdf", type: .coverLetter, date: Calendar.current.date(byAdding: .day, value: -3, to: Date())!),
+    ]
 
     var filteredJobs: [Job] {
         return jobs.filter { getItemFromFilter(job: $0) && matchesSearch(job: $0) }
@@ -342,6 +378,17 @@ final class ViewModel {
         showFavorites = false
     }
     
+    // true if any selected source filter matches this job's source.
+    // Uses isSameSource so "Other" matches every custom source.
+    func matchesSourceFilter(job: Job) -> Bool {
+        return filters.contains { filter in
+            if case .source(let source) = filter {
+                return source.isSameSource(as: job.source)
+            }
+            return false
+        }
+    }
+
     // function used to get which items are viewed in the dashboard based on filters
     // true means the job is in the filtered set and should be displayed,
     // false means the job should not be displayed
@@ -357,7 +404,7 @@ final class ViewModel {
         
         
         if filters.contains(where: { $0.type == "status"}) && filters.contains(where: {$0.type == "source"}){
-            if filters.contains(.status(job.status)) && filters.contains(.source(job.source)){
+            if filters.contains(.status(job.status)) && matchesSourceFilter(job: job){
                 if showFavorites{
                     if job.isFavorite{
                         return true
@@ -377,7 +424,7 @@ final class ViewModel {
                 }
             }
         } else if filters.contains(where: {$0.type == "source"}){
-            if filters.contains(.source(job.source)){
+            if matchesSourceFilter(job: job){
                 if showFavorites {
                     if job.isFavorite{
                         return true
@@ -438,7 +485,7 @@ final class ViewModel {
         for index in 0..<5 {
             let job = dummyJobs.randomElement()!
 
-            let randomDays = Int.random(in: -5...14)
+            let randomDays = Int.random(in: -15...14)
             let date = calendar.date(byAdding: .day, value: randomDays, to: Date())!
             let components = calendar.dateComponents([.year, .month, .day], from: date)
 
@@ -460,11 +507,11 @@ final class ViewModel {
 
         reminders = dummyReminders
     }
-    
     // dummy method used for demostration that removes all jobs from the list
     func clearJobList(){
         jobs = []
         reminders = []
+        filters.removeAll()
     }
     // create an account, first checks user information (ie email not empty, password is good) and displays a UI element if there is an error
     func createAccount(firstName: String, email: String, password: String, passwordStrength: PasswordStrength, UIElement: (AccountErrors) -> Void){
