@@ -13,7 +13,7 @@ struct User{
 }
 
 // MARK: - Job Related Enums
-enum JobStatus: CaseIterable{
+enum JobStatus: String, CaseIterable, Hashable{
     case saved
     case applied
     case onlineAssesment

@@ -104,6 +104,8 @@ struct MainNavScreen: View {
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showAddSheet) {
             SheetView()
+                .presentationDetents([.height(500)])
+                .presentationDragIndicator(.visible)
         }
     }
 }
@@ -112,25 +114,63 @@ struct SheetView: View{
     @Environment(\.dismiss) private var dismiss
     var vm = ViewModel.shared
     
+    @State var text: String = ""
+    
     var body: some View{
         VStack{
             HStack{
-                CButton(text: "Close", buttonType: .white, leadingImage: Image(systemName: "xmark")) {
+                Text("Add application")
+                    .font(.title)
+                    .fontWeight(.bold)
+                Spacer()
+                
+                Button {
                     dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundStyle(.black)
+                }
+            }
+            .padding(.vertical)
+            
+            Text("Paste a link from LinkedIn, Indeed, or Handshake.")
+                .fontWeight(.light)
+                .foregroundStyle(.gray)
+                .padding(.vertical)
+            CTextField(label: "Job link", placeholder: "Paste a job link", text: $text, inputType: .url)
+            
+            HStack {
+                VStack {
+                    Text("Link on your clipboard                    ")
+                        .fontWeight(.light)
+                        .foregroundStyle(.gray)
+                    Text("indeed.com/viewjob?jk=8f2a91c")
                 }
                 Spacer()
+                CButton(text: "Use", buttonType: .black){
+                    text = "indeed.com/viewjob?jk=8f2a91c"
+                }
             }
-            Spacer()
+            .padding(.vertical)
             
-            Text("Coming Soon")
-                .font(.title)
-                .fontWeight(.bold)
-            Text("In the future, you will be able to paste a link here to quickly add a job posting in addition to manually adding them. Right now the only feature is to manually add them.")
+            Text("-------------------- or --------------------")
+                .padding()
             
             CButton(text: "Enter details by hand", buttonType: .white, fullWidth: true) {
                 dismiss()
-                vm.push(.addScreen)
+                vm.push(.addScreen(roleText: "", companyText: "", sourceText: "", selectedStage: .saved))
             }
+            CButton(text: "Continue", buttonType: .black, fullWidth: true) {
+                if text != "" {
+                    dismiss()
+                    if text == "indeed.com/viewjob?jk=8f2a91c" {
+                        vm.push(.addScreen(roleText: "Product Analyst", companyText: "Dell Technologies", sourceText: "Indeed", selectedStage: .applied))
+                    } else {
+                        vm.push(.addScreen(roleText: "error", companyText: "", sourceText: "", selectedStage: .applied))
+                    }
+                }
+            }
+            .opacity(text == "" ? 0.25 : 1.0)
             Spacer()
         }
         .padding()
@@ -138,5 +178,6 @@ struct SheetView: View{
 }
 
 #Preview {
-    MainNavScreen()
+   MainNavScreen()
+  //  SheetView()
 }

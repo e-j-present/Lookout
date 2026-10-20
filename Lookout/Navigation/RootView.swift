@@ -42,8 +42,13 @@ struct RootView: View {
 
         case .mainNavScreen:
             MainNavScreen()
-        case .addScreen:
-            AddScreen()
+        case let .addScreen(roleText, companyText, sourceText, selectedStage):
+            AddScreen(
+                roleText: roleText,
+                companyText: companyText,
+                sourceText: sourceText,
+                selectedStage: selectedStage
+            )
         }
     }
 }

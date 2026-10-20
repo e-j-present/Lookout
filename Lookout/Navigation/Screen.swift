@@ -22,5 +22,10 @@ enum Screen: Hashable {
 
     // Main app
     case mainNavScreen
-    case addScreen
+    case addScreen(
+        roleText: String,
+        companyText: String,
+        sourceText: String,
+        selectedStage: JobStatus
+    )
 }
