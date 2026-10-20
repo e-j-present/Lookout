@@ -38,12 +38,65 @@ enum JobStatus: CaseIterable{
     }
 }
 
+enum JobSource: CaseIterable, Hashable{
+    static var allCases: [JobSource] {
+        return [.linkedin, .indeed, .handshake, .other(nil)]
+    }
+    
+    case linkedin
+    case indeed
+    case handshake
+    case other(String?)
+    
+    var label: String{
+        switch self{
+        case .linkedin:
+            return "LinkedIn"
+        case .indeed:
+            return "Indeed"
+        case .handshake:
+            return "Handshake"
+        case .other(let source):
+            return source?.capitalized ?? "Other"
+        }
+    }
+    
+    static func stringToJobSource(_ string: String) -> JobSource {
+        switch string.lowercased() {
+        case "linkedin":
+            return .linkedin
+        case "indeed":
+            return .indeed
+        case "handshake":
+            return .handshake
+        default:
+            return .other(string)
+        }
+    }
+}
+
+enum JobFilter: Hashable{
+    case status(JobStatus)
+    case source(JobSource)
+    
+    var type: String {
+        switch self{
+        case .status:
+            return "status"
+        case .source:
+            return "source"
+        }
+    }
+}
+
+
 // store job related info
 struct Job: Identifiable{
-    let role: String
-    let company: String
-    let source: String
+    var role: String
+    var company: String
+    var source: JobSource
     var status: JobStatus
+    var isFavorite: Bool = false
     let id = UUID()
 }
 
@@ -86,11 +139,91 @@ final class ViewModel {
     var loggedInUser: User? = nil
     
     // list of jobs
-    var jobs: [Job] = []
+    var jobs: [Job] = [] //[Job(role: "Test Role", company: "Test Company", source: .other("Test Source"), status: .applied)]
+    // list of favorite jobs
+    var favoriteJobs: [Job] = [] // TODO: Remove this array and replace with showFavorites Bool
+    // true to show only favorites, false otherwise
+    var showFavorites: Bool = false
+    // list of all the filters
+    var filters: Set<JobFilter> = []
+    // set used to add filters to but does not save them in the main filters set until the user selects show
+    var tempFilters: Set<JobFilter> = []
+    // count of jobs shown; number of filtered items or the size of jobs if there are no filters
+    var jobCount: Int = 0
+    
+    var filteredJobs: [Job] {
+        return jobs.filter(getItemFromFilter(job:))
+    }
 
     // stack of pushed screens, on top of the root view in RootView. See ViewModel+Navigation.swift
     var path: [Screen] = []
 
+    func saveFilters(){
+        filters = tempFilters
+        tempFilters.removeAll()
+    }
+    
+    func clearTempFilters(){
+        tempFilters.removeAll()
+    }
+    
+    func clearFilters(){
+        filters.removeAll()
+        tempFilters.removeAll()
+        showFavorites = false
+    }
+    
+    // function used to get which items are viewed in the dashboard based on filters
+    // true means the job is in the filtered set and should be displayed,
+    // false means the job should not be displayed
+    func getItemFromFilter(job: Job) -> Bool{
+        if showFavorites{
+            if filters.isEmpty && job.isFavorite{
+                return true
+            }
+           
+        } else if filters.isEmpty{
+            return true
+        }
+        
+        
+        if filters.contains(where: { $0.type == "status"}) && filters.contains(where: {$0.type == "source"}){
+            if filters.contains(.status(job.status)) && filters.contains(.source(job.source)){
+                if showFavorites{
+                    if job.isFavorite{
+                        return true
+                    }
+                } else{
+                    return true
+                }
+            }
+        } else if filters.contains(where: { $0.type == "status"}){
+            if filters.contains(.status(job.status)){
+                if showFavorites{
+                    if job.isFavorite{
+                        return true
+                    }
+                } else  {
+                    return true
+                }
+            }
+        } else if filters.contains(where: {$0.type == "source"}){
+            if filters.contains(.source(job.source)){
+                if showFavorites {
+                    if job.isFavorite{
+                        return true
+                    }
+                } else {
+                    return true
+                }
+                
+            }
+        }
+        
+        
+        return false
+    }
+    
     // method to create a job
     func createJob(job: Job){
         jobs.append(job)
@@ -99,7 +232,7 @@ final class ViewModel {
     func populateJobList(){
         let roles = ["iOS Developer", "Software Engineer", "Frontend Engineer", "Backend Developer", "Mobile Engineer", "Data Scientist", "Product Manager"]
         let companies = ["Apple", "Google", "Meta", "Netflix", "Amazon", "Spotify", "Stripe", "Airbnb", "Uber", "Lyft", "Microsoft"]
-        let sources = ["LinkedIn", "Indeed", "Handshake"]
+        let sources: [JobSource] = [.handshake, .indeed, .linkedin, .other("ZipRecruiter")]
         let statuses = JobStatus.allCases
         var dummyJobs: [Job] = []
         

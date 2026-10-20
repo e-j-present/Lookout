@@ -7,8 +7,9 @@ import SwiftUI
 struct DashboardFirstRun: View {
     
     @State var showAlert: Bool = true
+    @State var showFilterSheet: Bool = false
     @Binding var searchResults: String
-    let vm = ViewModel.shared
+    @Bindable var vm = ViewModel.shared
     var userName: String{
         if let user = vm.loggedInUser{
             return user.name
@@ -72,7 +73,7 @@ struct DashboardFirstRun: View {
                     )
                     
                     Button{
-                        
+                        showFilterSheet = true
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
                             .padding()
@@ -160,8 +161,30 @@ struct DashboardFirstRun: View {
                     }
                     
                     VStack{
-                        ForEach(vm.jobs){job in
-                            SavedApplicationCard(role: job.role, company: job.company, source: job.source, reminder: "Added just now", tagText: job.status.label, isFavorite: .constant(false))
+                        ForEach($vm.jobs){$job in
+                            if vm.getItemFromFilter(job: job){
+                                
+                                SavedApplicationCard(role: job.role, company: job.company, source: job.source.label, reminder: "Added just now", tagText: job.status.label, isFavorite: $job.isFavorite){
+                                    _, cardAction in
+                                    
+                                    switch cardAction{
+                                    case .cardTapped:
+                                        // do nothing for now
+                                        break
+                                        // add or remove job from favorites list
+                                    case .favoriteToggled(let isFavorite):
+                                        if isFavorite{
+                                            vm.favoriteJobs.append(job)
+                                        } else {
+                                            vm.favoriteJobs.removeAll { j in
+                                                j.id == job.id
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                }
+                            }
                         }
                         
                     }
@@ -175,6 +198,10 @@ struct DashboardFirstRun: View {
             .frame(maxHeight: .infinity, alignment: .top)
         }
         .scrollIndicators(.hidden)
+        // MARK: - Filter Sheet
+        .sheet(isPresented: $showFilterSheet) {
+            FilterView()
+        }
     }
 }
 
