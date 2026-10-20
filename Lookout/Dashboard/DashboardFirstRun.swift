@@ -8,7 +8,6 @@ struct DashboardFirstRun: View {
     
     @State var showAlert: Bool = true
     @State var showFilterSheet: Bool = false
-    @Binding var searchResults: String
     @Bindable var vm = ViewModel.shared
     var userName: String{
         if let user = vm.loggedInUser{
@@ -63,7 +62,18 @@ struct DashboardFirstRun: View {
                     HStack{
                         Image(systemName: "magnifyingglass")
                             .foregroundStyle(.tertiary)
-                        TextField("Search Company or role", text: $searchResults)
+                        TextField("Search company, role, or source", text: $vm.searchText)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+
+                        if !vm.searchText.isEmpty {
+                            Button{
+                                vm.searchText = ""
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
                     }
                     .padding()
                     .frame(maxHeight: .infinity)
@@ -145,7 +155,7 @@ struct DashboardFirstRun: View {
                         Text("Applications")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        Text("\(vm.jobs.count)")
+                        Text("\(vm.filteredJobs.count)")
                             .foregroundStyle(.secondary)
                     }
                     
@@ -162,7 +172,7 @@ struct DashboardFirstRun: View {
                     
                     VStack{
                         ForEach($vm.jobs){$job in
-                            if vm.getItemFromFilter(job: job){
+                            if vm.getItemFromFilter(job: job) && vm.matchesSearch(job: job){
                                 
                                 SavedApplicationCard(role: job.role, company: job.company, source: job.source.label, reminder: "Added just now", tagText: job.status.label, isFavorite: $job.isFavorite){
                                     _, cardAction in
@@ -206,6 +216,5 @@ struct DashboardFirstRun: View {
 }
 
 #Preview {
-    @Previewable @State var searchResults = ""
-    DashboardFirstRun(searchResults: $searchResults)
+    DashboardFirstRun()
 }

@@ -150,9 +150,22 @@ final class ViewModel {
     var tempFilters: Set<JobFilter> = []
     // count of jobs shown; number of filtered items or the size of jobs if there are no filters
     var jobCount: Int = 0
-    
+    // text typed into the dashboard search bar; matched against role, company and source
+    var searchText: String = ""
+
     var filteredJobs: [Job] {
-        return jobs.filter(getItemFromFilter(job:))
+        return jobs.filter { getItemFromFilter(job: $0) && matchesSearch(job: $0) }
+    }
+
+    // true if the job matches the current search text (case insensitive).
+    // An empty search matches everything.
+    func matchesSearch(job: Job) -> Bool {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if query.isEmpty { return true }
+
+        return job.role.localizedCaseInsensitiveContains(query)
+            || job.company.localizedCaseInsensitiveContains(query)
+            || job.source.label.localizedCaseInsensitiveContains(query)
     }
 
     // stack of pushed screens, on top of the root view in RootView. See ViewModel+Navigation.swift
