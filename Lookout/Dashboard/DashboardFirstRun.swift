@@ -131,30 +131,57 @@ struct DashboardFirstRun: View {
                             Text("Due Soon")
                                 .font(.title2)
                                 .fontWeight(.semibold)
-                            Text(" ")
+                            Text("\(vm.reminders.count)")
                                 .foregroundStyle(.secondary)
                         }
-                        HStack{
-                            Image(systemName: "circle.fill")
-                                .resizable()
-                                .aspectRatio(1, contentMode: .fit)
-                                .frame(width: 50)
-                                .foregroundStyle(.quinary)
-                            
-                            VStack(alignment: .leading){
-                                Text("No reminders yet")
-                                    .fontWeight(.semibold)
+                        if vm.reminders.isEmpty{
+                            HStack{
+                                Image(systemName: "circle.fill")
+                                    .resizable()
+                                    .aspectRatio(1, contentMode: .fit)
+                                    .frame(width: 50)
+                                    .foregroundStyle(.quinary)
                                 
-                                Text("Add one from any application to get a heads-up before it's due")
-                                    .foregroundStyle(.secondary)
+                                VStack(alignment: .leading){
+                                    Text("No reminders yet")
+                                        .fontWeight(.semibold)
+                                    
+                                    Text("Add one from any application to get a heads-up before it's due")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(.tertiary, style: StrokeStyle(lineWidth: 1, dash: [10]))
+                            )
+                        } else{
+                            
+                            VStack(spacing: 0) {
+                                ForEach(Array(vm.reminders.enumerated()), id: \.element.id) { index, reminder in
+                                    ReminderCard(
+                                        title: reminder.title,
+                                        company: reminder.company,
+                                        reminder: reminder.formatRelativeDate(),
+                                        month: reminder.getMonthAsName(),
+                                        day: reminder.day.description,
+                                        alert: reminder.isWithinDays(days: 1) || reminder.isPastDate()
+                                    )
+                                    .padding(.horizontal)
+
+                                    if index < vm.reminders.count - 1 {
+                                        Divider()
+                                    }
+                                }
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(.gray.opacity(0.3), lineWidth: 1)
+                            }
+                            
                         }
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(.tertiary, style: StrokeStyle(lineWidth: 1, dash: [10]))
-                        )
                         
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
