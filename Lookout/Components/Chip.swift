@@ -27,6 +27,8 @@ struct Chip: View {
     var verticalPadding: CGFloat = 8
     /// optional leading image
     var leadingImage: Image? = nil
+    /// optional trailing image
+    var trailingImage: Image? = nil
     /// Optional action for button chips
     var buttonAction: (() -> Void)? = nil
 
@@ -78,11 +80,13 @@ struct Chip: View {
     }
 
     private var chipContent: some View {
-        Label {
-            Text(text)
-        } icon: {
-            if let leadingImage = leadingImage {
+        HStack{
+            if let leadingImage = leadingImage{
                 leadingImage
+            }
+            Text(text)
+            if let trailingImage = trailingImage{
+                trailingImage
             }
         }
         .foregroundStyle(textColor)

@@ -20,6 +20,10 @@ struct Welcome: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(.black)
                 )
+            //TODO: Remove this later. This is here so I don't have to log in each time to test the app
+                .onTapGesture {
+                    vm.setRoot(.mainNavScreen)
+                }
 
             Text("Lookout")
                 .font(.title)

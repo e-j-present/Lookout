@@ -51,7 +51,6 @@ struct ReminderCard: View {
                 .foregroundStyle(alert ? .red : .black)
             }
         }
-        .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

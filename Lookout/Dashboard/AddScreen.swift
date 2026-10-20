@@ -109,7 +109,7 @@ struct AddScreen: View {
                     vm.createJob(job: Job(
                         role: roleText,
                         company: companyText,
-                        source: sourceText,
+                        source: JobSource.stringToJobSource(sourceText),
                         status: selectedStage))
                     vm.pop()
                 }

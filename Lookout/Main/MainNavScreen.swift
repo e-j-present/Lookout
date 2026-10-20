@@ -10,8 +10,7 @@ enum MainScreen{
 struct MainNavScreen: View {
     @State var screen: MainScreen = .dashboard
     @State var showAddSheet: Bool = false
-    @State var searchResults: String = ""
-    
+
     var vm = ViewModel.shared
     
     var body: some View {
@@ -20,7 +19,7 @@ struct MainNavScreen: View {
             if screen == .dashboard && vm.jobs.isEmpty{
                 DashboardEmpty()
             } else if screen == .dashboard && !vm.jobs.isEmpty{
-                DashboardFirstRun(searchResults: $searchResults)
+                DashboardFirstRun()
             } else if screen == .profile{
                 Spacer()
                 Text("Not Yet Implemented")
