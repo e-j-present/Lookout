@@ -87,6 +87,15 @@ enum JobFilter: Hashable{
             return "source"
         }
     }
+    
+    var label: String {
+        switch self{
+        case .status(let s):
+            return s.label
+        case .source(let s):
+            return s.label
+        }
+    }
 }
 
 
@@ -139,7 +148,7 @@ final class ViewModel {
     var loggedInUser: User? = nil
     
     // list of jobs
-    var jobs: [Job] = [] //[Job(role: "Test Role", company: "Test Company", source: .other("Test Source"), status: .applied)]
+    var jobs: [Job] = [] // [Job(role: "Test Role", company: "Test Company", source: .other("Test Source"), status: .applied)]
     // list of favorite jobs
     var favoriteJobs: [Job] = [] // TODO: Remove this array and replace with showFavorites Bool
     // true to show only favorites, false otherwise
@@ -156,6 +165,8 @@ final class ViewModel {
     var filteredJobs: [Job] {
         return jobs.filter { getItemFromFilter(job: $0) && matchesSearch(job: $0) }
     }
+    var isFiltered: Bool { !filters.isEmpty || !searchText.isEmpty }
+    var hasFilters: Bool { !filters.isEmpty }
 
     // true if the job matches the current search text (case insensitive).
     // An empty search matches everything.
