@@ -2,11 +2,7 @@
 //  FilterView.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/14/26.
-//
-
 import SwiftUI
-
 struct FilterView: View {
     
     @Environment(\.dismiss) private var dismiss
@@ -18,7 +14,6 @@ struct FilterView: View {
     @State private var savedShowFavorites: Bool = false
 
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 30){
             HStack{
                 Text("Filter")
@@ -81,28 +76,20 @@ struct FilterView: View {
                 } icon: {
                     Image(systemName: "star.fill")
                 }
-
             }
             .tint(.black)
             
             HStack{
-                
                 CButton(text: "Rest", buttonType: .white, fullWidth: false) {
-                    
                     withAnimation {
                         vm.clearFilters()
                     }
-                    
                 }
-                
                 CButton(text: "Show \(vm.jobCount) applications", buttonType: .black, fullWidth: true) {
                     dismiss()
                 }
                 
             }
-            
-            
-            
         }
         .padding(.top, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -118,7 +105,6 @@ struct FilterView: View {
             savedShowFavorites = vm.showFavorites
             vm.jobCount = vm.filteredJobs.count
         }
-        
     }
 }
 

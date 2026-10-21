@@ -2,25 +2,18 @@
 //  DetailsCard.swift
 //  Lookout
 //
-//  Created by Brett Sestak on 10/20/26.
-//
-
 import SwiftUI
-
 struct DetailsCard: View {
-    
     struct Detail: Identifiable {
         let id = UUID()
         let title: String
         let value: String
     }
-    
     let title: String
     let details: [Detail]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            
             // Card title
             Text(title)
                 .font(.title2)

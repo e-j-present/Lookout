@@ -2,9 +2,6 @@
 //  JobDescriptionCard.swift
 //  Lookout
 //
-//  Created by Brett Sestak on 10/20/26.
-//
-
 import SwiftUI
 
 struct JobDescriptionCard: View {
@@ -21,9 +18,7 @@ struct JobDescriptionCard: View {
                 Text("Job description")
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(.primary)
-
                 Spacer()
-
                 Button {
                     withAnimation(.easeInOut(duration: 0.25)) {
                         isExpanded.toggle()
@@ -61,4 +56,3 @@ struct JobDescriptionCard: View {
     )
     .padding()
 }
-

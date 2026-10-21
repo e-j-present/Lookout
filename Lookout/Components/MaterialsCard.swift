@@ -2,11 +2,7 @@
 //  MaterialsCard.swift
 //  Lookout
 //
-//  Created by Ethan Present on 10/20/26.
-//
-
 import SwiftUI
-
 struct MaterialsCard: View {
     
     let vm = ViewModel.shared
@@ -15,11 +11,8 @@ struct MaterialsCard: View {
         VStack{
             HStack{
                 Text("Materials")
-                
                 Spacer()
-                
                 Image(systemName: "plus")
-                
                 Text("Attach")
             }
             .font(.title3)
