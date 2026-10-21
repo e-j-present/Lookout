@@ -1,9 +1,58 @@
 # Lookout
 *For best results, we ran the app on the iPhone 17 Pro.*
 
+## Beta: 
+### New components we added:
+The following components will be used for the Application Detail Page
+
+- JobDescriptionCard
+	- Used to show the job title and description of the role. Can be collapsed and expanded by pressing the show more / less button.
+- DetailsCard
+	- Used to show specific details about the job application, including the website where the posting is found, the date applied, the application deadline, and the date the user added it to the app. 
+- MaterialsCard
+	- Used to show the user’s uploaded material such as resume and cover letter
+
+### Page Modifications: 
+- Dashboard
+    - The quick add feature, for the purpose of the demo, is still functional
+        - Clicking on “+ Add application” on the empty state of the dashboard will fill it with random data
+    - Dashboard now shows reminders
+        - Reminders contain a title, company, and due date
+            - Due date is formatted as month abbreviation + day and as a string based on the following: 
+                - If the reminder is set for today -> today
+                - If the reminder is set for tomorrow -> tomorrow
+                - If the reminder already happened, if it's still within the first week, it will display it as x days ago, but if it's longer than the first week, it will display it as x weeks ago
+            - Reminders are also auto-filled for the purpose of the demo when you click on “+ Add application” from the empty state. Since these are randomly generated, you might need to clear out the data and re-add them. Long-pressing the main plus button at the bottom of the screen returns to the empty state
+    - Dashboard now supports filters. Clicking on the button to the right of the search bar opens up the filter page
+        - At the bottom of the filter page, there is a confirmation button that will show the number of applications with the filters selected i.e., “Show 20 applications”
+            - Clicking on different filters will update this count live.
+            - In order to save the filters, you must click on “show x applications.” Clicking on the x button at the top right will not save the filters and will show the previously selected filters, if there were any.
+            - Using filters takes you to a modified version of the dashboard screen where you can see all filters applied as chips. Clicking on the chips removes that specific filter
+    - Dashboard now supports searching
+        - You can search for a job role, company, or source
+        - Searching is applied to the filtered list, meaning if you filtered for applied jobs and then search, your search results will be an applied job. If no filters are selected, searching is applied on all the jobs
+    - Dashboard supports favorites
+        - Favorite a job, then view it by filtering for only favorites
+- Add-Job
+    - Clicking on the + button will bring up a sheet where the user can paste a link to the job application. The user also has the option to manually enter details. If the link field is empty, the user can only click on the manual entry as the button is grayed out.
+    - Both options bring you to the Add Job page. If you use the link “in your clipboard” it will auto-populate all the forms. However, if you enter any other link it will bring up an error message indicating that it was not able to scrape the data. 
+    - The manual entry page is shown without the banner at the top that the other two screens show. 
+    - Also allows the user to toggle whether or not to receive notifications 2 days before the deadline is due. 
+
+- SubmitFirst (apart of onboarding)
+    - The screen now enters a “loading state” to imitate the app searching the internet for the job details. It lasts for 2.5 seconds before transitioning to having all the data filled out. 
+
+### Other Modifications: 
+- Fixed login screen to say “Enter password”
+- For the purpose of the demo, if you want to avoid logging in, you can tap on the logo on the welcome screen, and it will take you straight to the welcome screen. Login credentials are still the following: 
+    - **Email: john@utexas.edu**
+    - **Password: 12345678**
+
+
+## Alpha: 
 We decided to create components because many UI elements are reused throughout the project. 
 
-## Components:
+### Components:
 - AnalyticSquare 
     - Used in the dashboard to show the number of jobs with a specific status
 - CButton 
@@ -26,7 +75,7 @@ We decided to create components because many UI elements are reused throughout t
 - SearchBar
     - Allows the user to enter text for a search
 
-## Screen:
+### Screen:
 - Welcome
     - First screen the user will see when the app loads. They will have to sign in or create an account.
  - Create Account 
@@ -76,3 +125,5 @@ We decided to create components because many UI elements are reused throughout t
 
 
 We were able to follow the Figma document containing the low-fi and mid-fi app interface very well. There were no deviations we felt were necessary at this time, as we were able to recreate the interface in SwiftUI.
+
+
