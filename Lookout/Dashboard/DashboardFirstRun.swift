@@ -28,7 +28,7 @@ struct DashboardFirstRun: View {
     
     var body: some View {
         ScrollView(.vertical) {
-            VStack(spacing: 24){
+            LazyVStack(spacing: 24, pinnedViews: [.sectionHeaders]){
                 // MARK: - Dashboard title and chip for offer goal
                 HStack{
                     Text("Dashboard")
@@ -63,48 +63,6 @@ struct DashboardFirstRun: View {
                         RoundedRectangle(cornerRadius: 12)
                     )
                 }
-                
-                // MARK: - Search and Filter
-                HStack{
-                    // MARK: Search
-                    HStack{
-                        Image(systemName: "magnifyingglass")
-                            .foregroundStyle(.tertiary)
-                        TextField("Search company, role, or source", text: $vm.searchText)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                        
-                        if !vm.searchText.isEmpty {
-                            Button{
-                                vm.searchText = ""
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(Color(.tertiaryLabel))
-                            }
-                        }
-                    }
-                    .padding()
-                    .frame(maxHeight: .infinity)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(.tertiary, lineWidth: 1)
-                    )
-                    // MARK: Filter
-                    Button{
-                        showFilterSheet = true
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease")
-                            .padding()
-                            .foregroundStyle(vm.hasFilters ? .white : .black)
-                            .frame(maxHeight: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(vm.hasFilters ? Color.black : Color.white)
-                                    .stroke(vm.hasFilters ? Color.clear : Color(.tertiaryLabel), lineWidth: 1)
-                            )
-                    }
-                }
-                .fixedSize(horizontal: false, vertical: true)
                 
                 // MARK: - Analytic squares
                 if showAnalyticSquare{
@@ -187,60 +145,14 @@ struct DashboardFirstRun: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 // MARK: - Applications
-                VStack(alignment: .leading, spacing: 15){
-                    
+                VStack(alignment: .leading) {
                     if showApplicationHeading{
-                        HStack{
-                            Text("Applications")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                            Text("\(vm.filteredJobs.count)")
-                                .foregroundStyle(.secondary)
-                        }
-                        
-                        ScrollView(.horizontal) {
-                            HStack{
-                                Chip(text: "All   \(vm.jobs.count)", chipType: .black)
-                                Chip(text: "Saved   \(savedCount)", chipType: .white)
-                                Chip(text: "Applied   \(appliedCount)", chipType: .white)
-                                Chip(text: "Online assesment   \(onlineAssesmentCount)", chipType: .white)
-                                Chip(text: "Interviewed   \(interviewingCount)", chipType: .white)
-                                Chip(text: "Offers   \(offerCount)", chipType: .white)
-                            }
-                        }
+                        ApplicationCardTitle(savedCount: savedCount, appliedCount: appliedCount, onlineAssesmentCount: onlineAssesmentCount, interviewingCount: interviewingCount, offerCount: offerCount)
                     } else{
-                        FlowLayout{
-                            ForEach(Array(vm.filters), id: \.self){ filter in
-                                
-                                Chip(text: filter.label, chipType: .black, trailingImage: Image(systemName: "xmark")){
-                                    vm.filters.remove(filter)
-                                }
-                                    .font(.default)
-                            }
-                            if vm.showFavorites{
-                                Chip(text: "Favorites", chipType: .black, leadingImage: Image(systemName: "star.fill"), trailingImage: Image(systemName: "xmark")) {
-                                    vm.showFavorites = false
-                                }
-                            }
-                            if !vm.filters.isEmpty{
-                                VStack {
-                                    Spacer()
-                                    Button{
-                                        vm.clearFilters()
-                                    } label: {
-                                        Text("Clear All")
-                                            .font(.headline)
-                                            .foregroundStyle(.black)
-                                    }
-                                    Spacer()
-                                }
-                            }
-                        }
-                        Text("\(vm.filteredJobs.count) applilcations")
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.medium)
+                        FilterCardTitle()
                     }
-                    
+                }
+                Section {
                     // MARK: Application Cards
                     VStack{
                         ForEach($vm.jobs){$job in
@@ -271,6 +183,18 @@ struct DashboardFirstRun: View {
                         
                     }
                     .frame(maxWidth: .infinity)
+                } header: {
+                    // MARK: - Search and Filter
+                    SearchAndFilter(showFilterSheet: $showFilterSheet)
+                        .background(
+                            Color.white
+                                .ignoresSafeArea(edges: .top)
+                                .padding(.horizontal, -16)
+                                .frame(height: 95)
+                                
+                        )
+                        .zIndex(1)
+                        
                 }
                 .scrollIndicators(.never)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -279,6 +203,7 @@ struct DashboardFirstRun: View {
             .padding(.horizontal)
             .frame(maxHeight: .infinity, alignment: .top)
         }
+        .clipShape(Rectangle())
         .scrollIndicators(.hidden)
         // MARK: - Filter Sheet
         .sheet(isPresented: $showFilterSheet) {
@@ -292,6 +217,140 @@ struct DashboardFirstRun: View {
                 showApplicationHeading = !vm.isFiltered
             }
         }
+    }
+}
+
+// MARK: - Search and Filter Struct
+struct SearchAndFilter: View {
+    
+    @Bindable var vm = ViewModel.shared
+    @Binding var showFilterSheet: Bool
+    
+    var body: some View {
+        HStack{
+            // MARK: Search
+            HStack{
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.tertiary)
+                TextField("Search company, role, or source", text: $vm.searchText)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                
+                if !vm.searchText.isEmpty {
+                    Button{
+                        vm.searchText = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(Color(.tertiaryLabel))
+                    }
+                }
+            }
+            .padding()
+            .frame(maxHeight: .infinity)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(.tertiary, lineWidth: 1)
+            )
+            // MARK: Filter
+            Button{
+                showFilterSheet = true
+            } label: {
+                Image(systemName: "line.3.horizontal.decrease")
+                    .padding()
+                    .foregroundStyle(vm.hasFilters ? .white : .black)
+                    .frame(maxHeight: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(vm.hasFilters ? Color.black : Color.white)
+                            .stroke(vm.hasFilters ? Color.clear : Color(.tertiaryLabel), lineWidth: 1)
+                    )
+            }
+        }
+        .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+// MARK: - Application Card Title
+struct ApplicationCardTitle: View {
+    
+    let vm = ViewModel.shared
+    
+    @State var savedCount: Int
+    @State var appliedCount: Int
+    @State var onlineAssesmentCount: Int
+    @State var interviewingCount: Int
+    @State var offerCount: Int
+    
+    var body: some View {
+        HStack{
+            Text("Applications")
+                .font(.title2)
+                .fontWeight(.semibold)
+            Text("\(vm.filteredJobs.count)")
+                .foregroundStyle(.secondary)
+        }
+        
+        ScrollView(.horizontal) {
+            HStack{
+                Chip(text: "All   \(vm.jobs.count)", chipType: .black)
+                Chip(text: "Saved   \(savedCount)", chipType: .white){
+                    vm.filters.insert(.status(.saved))
+                }
+                Chip(text: "Applied   \(appliedCount)", chipType: .white){
+                    vm.filters.insert(.status(.applied))
+                }
+                Chip(text: "Online assesment   \(onlineAssesmentCount)", chipType: .white){
+                    vm.filters.insert(.status(.onlineAssesment))
+                }
+                Chip(text: "Interviewed   \(interviewingCount)", chipType: .white){
+                    vm.filters.insert(.status(.interviewing))
+                }
+                Chip(text: "Offers   \(offerCount)", chipType: .white){
+                    vm.filters.insert(.status(.offer))
+                }
+            }
+        }
+    }
+}
+
+// MARK: Filter Card Title
+struct FilterCardTitle: View {
+    
+    @Bindable var vm = ViewModel.shared
+    
+    var body: some View {
+        FlowLayout{
+            ForEach(Array(vm.filters), id: \.self){ filter in
+                
+                Chip(text: filter.label, chipType: .black, trailingImage: Image(systemName: "xmark")){
+                    vm.filters.remove(filter)
+                }
+                    .font(.default)
+            }
+            if vm.showFavorites{
+                Chip(text: "Favorites", chipType: .black, leadingImage: Image(systemName: "star.fill"), trailingImage: Image(systemName: "xmark")) {
+                    vm.showFavorites = false
+                }
+            }
+            if !vm.filters.isEmpty{
+                VStack {
+                    Spacer()
+                    Button{
+                        vm.clearFilters()
+                    } label: {
+                        Text("Clear All")
+                            .font(.headline)
+                            .foregroundStyle(.black)
+                    }
+                    Spacer()
+                }
+            }
+        }
+        Text("\(vm.filteredJobs.count) applilcations")
+            .foregroundStyle(.secondary)
+            .fontWeight(.medium)
+            .padding(.top, 8)
+            .padding(.bottom, -6)
     }
 }
 
