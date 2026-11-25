@@ -10,6 +10,8 @@ struct AnalyticSquare: View {
     /// title/stage of the component
     let title: String
     let count: Int
+    /// on click function
+    var onClick: (() -> Void)? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4){
@@ -29,6 +31,10 @@ struct AnalyticSquare: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(.gray, lineWidth: 1.0)
         )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onClick?()
+        }
     }
 }
 

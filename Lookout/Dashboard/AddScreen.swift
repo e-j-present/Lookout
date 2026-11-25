@@ -106,11 +106,21 @@ struct AddScreen: View {
             
             HStack{
                 CButton(text: "Save application", buttonType: .black, fullWidth: true) {
+                    
+                    // if the user wants a reminder 2 days before
+                    var r: Reminder? = nil
+                    if isOn {
+                        let twoDaysBefore = Calendar.current.date(byAdding: .day, value: -2, to: date)
+                        r = Reminder(date: twoDaysBefore ?? Date(timeIntervalSince1970: 0), title: roleText, company: companyText)
+                    }
+                    
+                    
                     vm.createJob(job: Job(
                         role: roleText,
                         company: companyText,
                         source: JobSource.stringToJobSource(sourceText),
-                        status: selectedStage))
+                        status: selectedStage,
+                        reminder: r))
                     vm.pop()
                 }
                 Spacer()

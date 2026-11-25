@@ -117,6 +117,7 @@ struct Job: Identifiable{
     var source: JobSource
     var status: JobStatus
     var isFavorite: Bool = false
+    var reminder: Reminder? = nil
     let id = UUID()
 }
 
@@ -442,7 +443,11 @@ final class ViewModel {
     
     // method to create a job
     func createJob(job: Job){
+        if let reminder = job.reminder{
+            reminders.append(reminder)
+        }
         jobs.append(job)
+        
     }
     // dummy method used for demostration that populates the jobs list with random data just to fill it
     func populateJobList() {

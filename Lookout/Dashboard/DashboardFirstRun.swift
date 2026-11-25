@@ -11,6 +11,10 @@ struct DashboardFirstRun: View {
     @State var showReminders: Bool = true
     @State var showApplicationHeading: Bool = true
     
+    // Scroll position to bring the user back up when selecting filters
+    private let DASHBOARD_ID = "DASHBOARD"
+    @State private var scrollPosition = ScrollPosition(id: "DASHBOARD")
+    
     @State var showAlert: Bool = true
     @State var showFilterSheet: Bool = false
     @Bindable var vm = ViewModel.shared
@@ -34,6 +38,7 @@ struct DashboardFirstRun: View {
                     Text("Dashboard")
                         .font(.title)
                         .fontWeight(.semibold)
+                        .id(DASHBOARD_ID)
                     
                     Spacer()
                     Chip(text: "11 wks to offer goal", chipType: .white)
@@ -70,15 +75,21 @@ struct DashboardFirstRun: View {
                         AnalyticSquare(
                             title: "Applied",
                             count: appliedCount
-                        )
+                        ){
+                            vm.filters.insert(.status(.applied))
+                        }
                         AnalyticSquare(
                             title: "Interviewing",
                             count: interviewingCount
-                        )
+                        ){
+                            vm.filters.insert(.status(.interviewing))
+                        }
                         AnalyticSquare(
                             title: "Offers",
                             count: offerCount
-                        )
+                        ){
+                            vm.filters.insert(.status(.offer))
+                        }
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 }
@@ -202,7 +213,11 @@ struct DashboardFirstRun: View {
             .padding(.vertical)
             .padding(.horizontal)
             .frame(maxHeight: .infinity, alignment: .top)
+            .scrollTargetLayout()
         }
+        .scrollPosition($scrollPosition)
+        .containerRelativeFrame(.horizontal, alignment: .center)
+        .scrollClipDisabled()
         .clipShape(Rectangle())
         .scrollIndicators(.hidden)
         // MARK: - Filter Sheet
@@ -215,6 +230,7 @@ struct DashboardFirstRun: View {
                 showAnalyticSquare = !vm.isFiltered
                 showReminders = !vm.isFiltered
                 showApplicationHeading = !vm.isFiltered
+                scrollPosition = ScrollPosition(id: DASHBOARD_ID, anchor: .top)
             }
         }
     }
