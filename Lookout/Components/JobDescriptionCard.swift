@@ -16,7 +16,8 @@ struct JobDescriptionCard: View {
             // Header
             HStack {
                 Text("Job description")
-                    .font(.system(size: 22, weight: .bold))
+                    .font(.title3)
+                    .fontWeight(.semibold)
                     .foregroundStyle(.primary)
                 Spacer()
                 Button {
@@ -25,7 +26,7 @@ struct JobDescriptionCard: View {
                     }
                 } label: {
                     Text(isExpanded ? "Show less" : "Show more")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.headline)
                         .foregroundStyle(.primary)
                 }
                 .buttonStyle(.plain)
@@ -37,13 +38,6 @@ struct JobDescriptionCard: View {
                 .foregroundStyle(.primary)
                 .lineLimit(isExpanded ? nil : collapsedLineLimit)
                 .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(20)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .overlay {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color(.systemGray4), lineWidth: 1)
         }
     }
 }

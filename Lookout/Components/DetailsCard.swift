@@ -16,9 +16,8 @@ struct DetailsCard: View {
         VStack(alignment: .leading, spacing: 0) {
             // Card title
             Text(title)
-                .font(.title2)
+                .font(.title3)
                 .fontWeight(.semibold)
-                .padding(.bottom, 24)
             
             // Detail rows
             ForEach(Array(details.enumerated()), id: \.element.id) { index, detail in
@@ -41,13 +40,6 @@ struct DetailsCard: View {
                     Divider()
                 }
             }
-        }
-        .padding(24)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .overlay {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color(.systemGray4), lineWidth: 1)
         }
     }
 }

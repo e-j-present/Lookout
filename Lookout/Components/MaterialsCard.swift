@@ -11,9 +11,14 @@ struct MaterialsCard: View {
         VStack{
             HStack{
                 Text("Materials")
+                    .font(.title3)
+                    .fontWeight(.semibold)
                 Spacer()
+                
                 Image(systemName: "plus")
+                    .font(.headline)
                 Text("Attach")
+                    .font(.headline)
             }
             .font(.title3)
             .fontWeight(.medium)
@@ -43,11 +48,6 @@ struct MaterialsCard: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding()
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(.gray, lineWidth: 1)
-        )
     }
 }
 
